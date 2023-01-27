@@ -1,8 +1,8 @@
 from flask import request, make_response
+from werkzeug.security import generate_password_hash, check_password_hash
 from base import app
 from base.com.dao.auth_dao import UserDAO
 from base.com.vo.auth_vo import UserVO
-
 
 @app.route('/api/a1/auth/register', methods=['POST'])
 def auth_register():
@@ -16,11 +16,10 @@ def auth_register():
         user_vo = UserVO()
         
         user_vo.user_email = email
-        user_vo.user_password = password
+        user_vo.user_password = generate_password_hash(password)
         
         try:
             existing_user = user_dao.get_single_user(email)
-            print(existing_user)
             user_dao.add_user(user_vo)
             return make_response({"message": "Successfully added", "statusCode": 201}, 201)
         
