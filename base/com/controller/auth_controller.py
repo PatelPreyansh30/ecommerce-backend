@@ -8,20 +8,36 @@ from base.com.vo.auth_vo import UserVO
 def auth_register():
     email = request.json.get("email")
     password = request.json.get('password')
-    
+        
     if not email or not password:
         return make_response({"message": "Invalid data", "statusCode": 400}, 400)
     else:
         user_dao = UserDAO()
         user_vo = UserVO()
-        
+            
         user_vo.user_email = email
         user_vo.user_password = generate_password_hash(password)
-        
+            
         try:
             existing_user = user_dao.get_single_user(email)
             user_dao.add_user(user_vo)
             return make_response({"message": "Successfully added", "statusCode": 201}, 201)
-        
+            
         except Exception as e:
             return make_response({"message": "Email already exists", "statusCode": 400}, 400)
+
+@app.route('/api/a1/auth/login', methods=['POST'])
+def auth_login():
+    email = request.json.get("email")
+    password = request.json.get('password')
+    
+    if not email or not password:
+        return make_response({"message": "Invalid data", "statusCode": 400}, 400)
+    else:
+        user_dao = UserDAO()
+
+        existing_user = user_dao.get_single_user(email)
+        if not existing_user == None:
+            return make_response({"message": "Valid User", "statusCode": 201}, 201)
+        else:
+            return make_response({"message": "User doesn't exists", "statusCode": 400}, 400)
