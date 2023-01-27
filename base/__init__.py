@@ -7,7 +7,7 @@ app.secret_key = 'e_commerce_app'
 
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=30)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:root@localhost:3306/dashboard'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:root@localhost:3306/e_commerce_project'
 
 db = SQLAlchemy(app)
 
