@@ -1,0 +1,1 @@
+from base.com.vo import auth_vo
