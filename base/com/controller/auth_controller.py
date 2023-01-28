@@ -42,8 +42,8 @@ def auth_login():
             isPasswordTrue = check_password_hash(existing_user.user_password, password)
             if isPasswordTrue:
                 
-                access_token = create_access_token(identity=email)
-                refresh_token = create_refresh_token(identity=email)
+                access_token = create_access_token(identity= {"email":email, "userId": existing_user.user_id})
+                refresh_token = create_refresh_token(identity= {"email":email, "userId": existing_user.user_id})
                 # refresh_token_dao = RefreshTokenDAO()
                 # refresh_token_vo = RefreshTokenVO()
                 # refresh_token_vo.refresh_token = refresh_token
