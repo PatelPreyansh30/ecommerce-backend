@@ -1,5 +1,6 @@
 from flask import request, make_response
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_jwt_extended import create_access_token, create_refresh_token, jwt_refresh_token_required
 from base import app
 from base.com.dao.auth_dao import UserDAO
 from base.com.vo.auth_vo import UserVO
@@ -38,6 +39,20 @@ def auth_login():
 
         existing_user = user_dao.get_single_user(email)
         if not existing_user == None:
-            return make_response({"message": "Valid User", "statusCode": 201}, 201)
+            isPasswordTrue = check_password_hash(existing_user.user_password, password)
+            if isPasswordTrue:
+                
+                access_token = create_access_token(identity=email)
+                refresh_token = create_refresh_token(identity=email)
+                
+                return make_response({"accessToken": access_token, "refreshToken": refresh_token, "statusCode": 201}, 201)
+            else:
+                return make_response({"message": "Invalid credential", "statusCode": 400}, 400)
+            
         else:
             return make_response({"message": "User doesn't exists", "statusCode": 400}, 400)
+
+# @app.route('/api/a1/auth/get-access-token', methods=['POST'])
+# @jwt_refresh_token_required
+# def get_access_token():
+#     return 
