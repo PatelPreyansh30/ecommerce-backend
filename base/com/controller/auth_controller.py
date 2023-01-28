@@ -2,14 +2,14 @@ from flask import request, make_response
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import create_access_token, create_refresh_token, jwt_required, get_jwt_identity
 from base import app
-from base.com.dao.auth_dao import UserDAO, RefreshTokenDAO
-from base.com.vo.auth_vo import UserVO, RefreshTokenVO
+from base.com.dao.auth_dao import UserDAO
+from base.com.vo.auth_vo import UserVO
 
 @app.route('/api/a1/auth/register', methods=['POST'])
 def auth_register():
     email = request.json.get("email")
     password = request.json.get('password')
-        
+
     if not email or not password:
         return make_response({"msg": "Invalid data"}, 400)
     else:
