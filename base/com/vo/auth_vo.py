@@ -13,19 +13,19 @@ class UserVO(db.Model):
             'user_email': self.user_email,
             'user_password': self.user_password
         }
-        
-class RefreshTokenVO(db.Model):
-    __tablename__ : 'user_refresh_token'
-    refresh_token_id = db.Column('refresh_token_id', db.Integer, primary_key = True, autoincrement = True)
-    refresh_token = db.Column('refresh_token', db.Text, nullable=False)
-    refresh_user_id = db.Column('refresh_user_id', db.ForeignKey(UserVO.user_id, ondelete= 'CASCADE', onupdate= 'CASCADE'), nullable= False, unique=True)
 
-    def as_dict(self):
-        return {
-            'refresh_token_id': self.refresh_token_id,
-            'refresh_token': self.refresh_token,
-            'refresh_user_id': self.refresh_user_id
-        }
+# class RefreshTokenVO(db.Model):
+#     __tablename__ : 'user_refresh_token'
+#     refresh_token_id = db.Column('refresh_token_id', db.Integer, primary_key = True, autoincrement = True)
+#     refresh_token = db.Column('refresh_token', db.Text, nullable=False)
+#     refresh_user_id = db.Column('refresh_user_id', db.ForeignKey(UserVO.user_id, ondelete= 'CASCADE', onupdate= 'CASCADE'), nullable= False, unique=True)
+
+#     def as_dict(self):
+#         return {
+#             'refresh_token_id': self.refresh_token_id,
+#             'refresh_token': self.refresh_token,
+#             'refresh_user_id': self.refresh_user_id
+#         }
         
 with app.app_context():
     db.create_all()

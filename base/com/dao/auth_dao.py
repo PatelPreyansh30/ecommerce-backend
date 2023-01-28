@@ -11,8 +11,8 @@ class UserDAO():
         return user_object
     
 
-class RefreshTokenDAO():
-    def add_refresh_token(self, refresh_token_obj):
-        db.session.add(refresh_token_obj)
-        db.session.commit()
+# class RefreshTokenDAO():
+#     def add_refresh_token(self, refresh_token_obj):
+#         db.session.add(refresh_token_obj)
+#         db.session.commit()
     
