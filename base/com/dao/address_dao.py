@@ -1,6 +1,6 @@
 import json
 from base import db
-from base.com.vo.address_vo import DeliveryAddressVO
+from base.com.vo.address_vo import DeliveryAddressVO, CountryVO, StateVO, CityVO
 
 
 class DeliveryAddressDAO():
@@ -26,3 +26,33 @@ class DeliveryAddressDAO():
     def update_user_specific_address(self, address_obj):
         db.session.merge(address_obj)
         db.session.commit()
+
+
+class CountryDAO():
+    def get_countries(self):
+        countries = CountryVO.query.all()
+        return [data.as_dict() for data in countries]
+
+
+class StateDAO():
+    def get_states(self):
+        states = StateVO.query.all()
+        return [data.as_dict() for data in states]
+
+    def get_state_based_on_country(self, country_id):
+        states = StateVO.query.filter_by(country_id=country_id).all()
+        return [data.as_dict() for data in states]
+
+
+class CityDAO():
+    def get_cities(self):
+        countries = CountryVO.query.all()
+        return [data.as_dict() for data in countries]
+
+    def get_citie_based_on_state(self, state_id):
+        cities = CityVO.query.filter_by(state_id=state_id).all()
+        return [data.as_dict() for data in cities]
+
+    def get_citie_based_on_country(self, country_id):
+        cities = CityVO.query.filter_by(country_id=country_id).all()
+        return [data.as_dict() for data in cities]
