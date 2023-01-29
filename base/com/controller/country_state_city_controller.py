@@ -62,6 +62,6 @@ def get_cities():
             data_list.append(data_dict)
 
         if len(data_list) != 0:
-            return make_response({"states": data_list}, 200)
+            return make_response({"cities": data_list}, 200)
         else:
             return make_response({"msg": f"No cities found"}, 400)
