@@ -1,18 +1,20 @@
+from datetime import datetime
 from flask import request, make_response
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from datetime import datetime
 from sqlalchemy.orm.exc import UnmappedInstanceError
 from base import app
 from base.com.dao.address_dao import DeliveryAddressDAO
 from base.com.vo.address_vo import DeliveryAddressVO
 
+address_api_path = '/api/a2'
+specific_address_api_path = '/api/a2/address'
 
-@app.route('/api/a2/addresses', methods=['GET','POST'])
+@app.route(f'{address_api_path}/addresses', methods=['GET','POST'])
 @jwt_required()
 def multiple_delivery_address():
-    user_id = get_jwt_identity().get('userId')
     delivery_address_dao = DeliveryAddressDAO()
     delivery_address_vo = DeliveryAddressVO()
+    user_id = get_jwt_identity().get('userId')
         
     if request.method == 'GET':
         data = delivery_address_dao.get_user_addresses(user_id)
@@ -34,7 +36,7 @@ def multiple_delivery_address():
         delivery_address_dao.add_address(delivery_address_vo)
         return make_response({"msg": "Address added successfully"}, 201)
 
-@app.route('/api/a2/address/<int:id>', methods=['GET','DELETE','PUT'])
+@app.route(f'{specific_address_api_path}/<int:id>', methods=['GET','DELETE','PUT'])
 @jwt_required()
 def specific_delivery_address(id):
     user_id = get_jwt_identity().get('userId')
