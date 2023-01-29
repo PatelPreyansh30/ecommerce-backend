@@ -9,7 +9,7 @@ app.secret_key = 'app-secret'
 
 # JWT Configuration
 app.config['JWT_SECRET_KEY'] = 'jwt-secret'
-app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(minutes=30)
+app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=2)
 app.config['JWT_REFRESH_TOKEN_EXPIRES'] = timedelta(days=60)
 
 # MySQL Database Configuration
