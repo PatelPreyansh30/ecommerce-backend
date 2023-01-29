@@ -12,3 +12,7 @@ class DeliveryAddressDAO():
     def get_user_addresses(self, user_id):
         all_data = DeliveryAddressVO.query.filter_by(user_id = user_id).all()
         return [data.as_dict() for data in all_data]
+    
+    def get_user_specific_address(self, address_id, user_id):
+        data = DeliveryAddressVO.query.filter_by(address_id= address_id, user_id= user_id).first()
+        return data.as_dict()
