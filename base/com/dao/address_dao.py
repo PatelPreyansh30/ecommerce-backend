@@ -21,3 +21,7 @@ class DeliveryAddressDAO():
         user_obj = DeliveryAddressVO.query.filter_by(address_id= address_id, user_id= user_id).first()
         db.session.delete(user_obj)
         db.session.commit()
+        
+    def update_user_specific_address(self, address_obj):
+        db.session.merge(address_obj)
+        db.session.commit()
