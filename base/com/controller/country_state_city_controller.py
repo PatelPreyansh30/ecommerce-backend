@@ -24,12 +24,12 @@ def get_country():
 def get_states():
     state_dao = StateDAO()
 
-    country_id = request.args.get('country')
+    country_iso_code = request.args.get('country')
 
-    if not country_id:
+    if not country_iso_code:
         return make_response({"msg": "Query param not correct"}, 400)
     else:
-        data = state_dao.get_state_based_on_country(country_id)
+        data = state_dao.get_state_based_on_country(country_iso_code)
         data_list = []
         for data in data:
             data_dict = {}
@@ -47,12 +47,12 @@ def get_states():
 @jwt_required()
 def get_cities():
     city_dao = CityDAO()
-    state_id = request.args.get('state')
+    state_iso_code = request.args.get('state')
 
-    if not state_id:
+    if not state_iso_code:
         return make_response({"msg": "Query param not correct"}, 400)
     else:
-        data = city_dao.get_citie_based_on_state(state_id)
+        data = city_dao.get_citie_based_on_state(state_iso_code)
         data_list = []
         for data in data:
             data_dict = {}
