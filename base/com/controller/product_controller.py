@@ -8,4 +8,4 @@ def get_products():
     product_dao = ProductDAO()
     prod_obj_list = product_dao.get_all_products()
     all_products = list(map(ProductVO.as_dict, prod_obj_list))
-    return jsonify(all_products)
+    return make_response({"products":f"{all_products}"}, 200)
