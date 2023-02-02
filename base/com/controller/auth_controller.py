@@ -49,7 +49,7 @@ def auth_login():
                 refresh_token = create_refresh_token(
                     identity={"email": email, "userId": existing_user.user_id})
 
-                return make_response({"accessToken": access_token, "refreshToken": refresh_token}, 201)
+                return make_response({"accessToken": access_token, "refreshToken": refresh_token, "user": {"email": existing_user.user_email, "user_id": existing_user.user_id}}, 201)
             else:
                 return make_response({"msg": "Invalid credential"}, 400)
         else:
