@@ -13,7 +13,7 @@ app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=2)
 app.config['JWT_REFRESH_TOKEN_EXPIRES'] = timedelta(days=60)
 
 # MySQL Database Configuration
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:root@localhost:3306/e_commerce_project?charset=utf8'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://sql12595219:j6iqDndkYV@sql12.freesqldatabase.com:3306/sql12595219?charset=utf8'
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=30)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
