@@ -8,6 +8,8 @@ from flask import make_response
 @jwt_required()
 def get_products():
     product_dao = ProductDAO()
-    prod_obj_list = product_dao.get_all_products()
-    all_products = list(map(ProductVO.as_dict, prod_obj_list))
-    return make_response({"products":all_products}, 200)
+    data = product_dao.get_all_products()
+    if len(data) != 0:
+        return make_response({"products":data}, 200)
+    else:
+        return make_response({"msg":"No products found"}, 400)
