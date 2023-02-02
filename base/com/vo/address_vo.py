@@ -46,7 +46,7 @@ class CountryVO(db.Model):
 
     def as_dict(self):
         return {
-            'country_id': self.country_id,
+            # 'country_id': self.country_id,
             'country_name': self.country_name,
             'country_iso_code': self.country_iso_code
         }
@@ -64,9 +64,9 @@ class StateVO(db.Model):
 
     def as_dict(self):
         return {
-            'state_id': self.state_id,
+            # 'state_id': self.state_id,
             'state_name': self.state_name,
-            'country_iso_code': self.country_iso_code,
+            # 'country_iso_code': self.country_iso_code,
             'state_iso_code': self.state_iso_code
         }
 
@@ -82,7 +82,7 @@ class CityVO(db.Model):
 
     def as_dict(self):
         return {
-            'city_id': self.city_id,
+            # 'city_id': self.city_id,
             'city_name': self.city_name,
             'state_iso_code': self.state_iso_code
         }
