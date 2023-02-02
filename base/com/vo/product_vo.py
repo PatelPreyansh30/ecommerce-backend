@@ -42,10 +42,10 @@ class ProductSubCategoryVO(db.Model):
 
     def as_dict(self):
         return {
-            'product_subcategory_id': product_subcategory_id,
-            'product_subcategory_name': product_subcategory_name,
-            'product_subcategory_description': product_subcategory_description,
-            'product_category_id': product_category_id
+            'product_subcategory_id': self.product_subcategory_id,
+            'product_subcategory_name': self.product_subcategory_name,
+            'product_subcategory_description': self.product_subcategory_description,
+            'product_category_id': self.product_category_id
         }
 
 
@@ -84,10 +84,10 @@ class ProductReviewRatings(db.Model):
 
     def as_dict(self):
         return {
-            'product_review_rating_id': product_review_rating_id,
-            'product_review_msg': product_review_msg,
-            'product_ratings': product_ratings,
-            'user_id': user_id
+            'product_review_rating_id': self.product_review_rating_id,
+            'product_review_msg': self.product_review_msg,
+            'product_ratings': self.product_ratings,
+            'user_id': self.user_id
         }
 
 
