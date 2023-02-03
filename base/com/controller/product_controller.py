@@ -4,8 +4,10 @@ from base import app
 from base.com.vo.product_vo import ProductVO
 from base.com.dao.product_dao import ProductDAO, ProductCategoryDAO, ReviewsRatingsDAO
 
+product_api_path = '/api/a3/products'
 
-@app.route('/api/a3/products')
+
+@app.route(f'{product_api_path}')
 @jwt_required()
 def get_products():
     product_dao = ProductDAO()
@@ -24,7 +26,34 @@ def get_products():
                 return make_response({"msg": "No products found"}, 400)
         except AttributeError:
             return make_response({"msg": "No products found for given category"}, 400)
-            
+
+
+@app.route(f'{product_api_path}/categories')
+@jwt_required()
+def get_all_categories():
+    product_category_dao = ProductCategoryDAO()
+    data = product_category_dao.get_all_categories()
+    if len(data) != 0:
+        return make_response({"categories": data}, 200)
+    else:
+        return make_response({"msg": "No categories found"}, 400)
+
+
+@app.route(f'{product_api_path}/subcategory')
+@jwt_required()
+def get_subcategories():
+    product_category_dao = ProductCategoryDAO()
+    category = request.args.get('category')
+    if not category:
+        return make_response({"msg": "Query param not correct"}, 400)
+    else:
+        category_id = product_category_dao.get_category_id_based_category(category)
+        data = product_category_dao.get_subcategory_based_category(category_id)
+        if len(data) != 0:
+            return make_response({"categories": data}, 200)
+        else:
+            return make_response({"msg": "No categories found"}, 400)
+
 
 @app.route('/api/a3/user/reviews')
 @jwt_required()

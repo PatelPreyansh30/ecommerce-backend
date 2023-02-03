@@ -9,6 +9,15 @@ class ProductCategoryDAO():
             product_category_name=category_name).first()
         return category.product_category_id
 
+    def get_all_categories(self):
+        categories = ProductCategoryVO.query.all()
+        return [category.as_dict() for category in categories]
+
+    def get_subcategory_based_category(self, category_id):
+        subcategories = ProductSubCategoryVO.query.filter_by(
+            product_category_id=category_id).all()
+        return [subcategory.as_dict() for subcategory in subcategories]
+
 
 class ProductDAO():
     def get_all_products_based_category(self, category_id):
