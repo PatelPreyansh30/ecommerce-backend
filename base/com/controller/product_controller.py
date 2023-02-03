@@ -46,14 +46,11 @@ def get_one_product(id):
 @jwt_required()
 def get_one_product_reviews(id):
     product_review_rating_dao = ProductReviewsRatingsDAO()
-    try:
-        data = product_review_rating_dao.get_reviews_by_product(id)
-        if not data:
-            return make_response({"msg": "No reviews found"}, 400)
-        else:
-            return make_response({"reviews": data}, 200)
-    except TypeError:
-        return make_response({"msg": "Invalid id"}, 400)
+    data = product_review_rating_dao.get_reviews_ratings_by_product(id)
+    if len(data) == 0:
+        return make_response({"msg": "No reviews found"}, 400)
+    else:
+        return make_response({"reviews": data}, 200)
 
 
 @app.route(f'{product_api_path}/categories')
@@ -89,20 +86,8 @@ def get_subcategories():
 def get_reviews_by_user():
     product_review_dao = ProductReviewsRatingsDAO()
     user_id = get_jwt_identity().get('userId')
-    data = product_review_dao.get_reviews_by_user(user_id)
+    data = product_review_dao.get_reviews_ratings_by_user(user_id)
     if len(data) != 0:
         return make_response({"reviews": data}, 200)
     else:
         return make_response({"msg": "No reviews found"}, 400)
-
-
-@app.route('/api/a3/user/ratings')
-@jwt_required()
-def get_ratings_by_user():
-    product_rating_dao = ProductReviewsRatingsDAO()
-    user_id = get_jwt_identity().get('userId')
-    data = product_rating_dao.get_ratings_by_user(user_id)
-    if len(data) != 0:
-        return make_response({"ratings": data}, 200)
-    else:
-        return make_response({"msg": "No ratings found"}, 400)

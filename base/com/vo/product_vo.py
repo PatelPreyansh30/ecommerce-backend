@@ -100,39 +100,12 @@ class ProductVO(db.Model):
         }
 
 
-class ProductReviewVO(db.Model):
-    __tablename__ = 'product_review_table'
-    product_review_id = db.Column('product_review_id', db.Integer,
-                                  primary_key=True, autoincrement=True)
-    product_review_msg = db.Column(
-        'product_review_msg', db.Text, nullable=False)
-    user_id = db.Column('user_id', db.ForeignKey(
-        UserVO.user_id, ondelete='CASCADE', onupdate='CASCADE'), nullable=False)
-    product_id = db.Column('product_id', db.ForeignKey(
-        ProductVO.product_id, ondelete='CASCADE', onupdate='CASCADE'), nullable=False)
-    # created_at = db.Column('created_at', db.DateTime,
-    #                        default=datetime.datetime.utcnow)
-    # updated_at = db.Column('updated_at', db.DateTime,
-    #                        default=datetime.datetime.utcnow)
-    # deleted_at = db.Column('deleted_at', db.DateTime)
-
-    def as_dict(self):
-        return {
-            'product_review_id': self.product_review_id,
-            'product_review_msg': self.product_review_msg,
-            'user_id': self.user_id,
-            'product_id': self.product_id
-        }
-
-
 class ProductRatingVO(db.Model):
     __tablename__ = 'product_rating_table'
     product_rating_id = db.Column('product_rating_id', db.Integer,
                                   primary_key=True, autoincrement=True)
     product_rating = db.Column(
         'product_rating', db.Float, nullable=False)
-    user_id = db.Column('user_id', db.ForeignKey(
-        UserVO.user_id, ondelete='CASCADE', onupdate='CASCADE'), nullable=False)
     product_id = db.Column('product_id', db.ForeignKey(
         ProductVO.product_id, ondelete='CASCADE', onupdate='CASCADE'), nullable=False)
     # created_at = db.Column('created_at', db.DateTime,
@@ -145,8 +118,35 @@ class ProductRatingVO(db.Model):
         return {
             'product_rating_id': self.product_rating_id,
             'product_rating': self.product_rating,
-            'user_id': self.user_id,
             'product_id': self.product_id
+        }
+
+
+class ProductReviewVO(db.Model):
+    __tablename__ = 'product_review_table'
+    product_review_id = db.Column('product_review_id', db.Integer,
+                                  primary_key=True, autoincrement=True)
+    product_review_msg = db.Column(
+        'product_review_msg', db.Text, nullable=False)
+    user_id = db.Column('user_id', db.ForeignKey(
+        UserVO.user_id, ondelete='CASCADE', onupdate='CASCADE'), nullable=False)
+    product_id = db.Column('product_id', db.ForeignKey(
+        ProductVO.product_id, ondelete='CASCADE', onupdate='CASCADE'), nullable=False)
+    product_rating_id = db.Column('product_rating_id', db.ForeignKey(
+        ProductRatingVO.product_rating_id, ondelete='CASCADE', onupdate='CASCADE'), nullable=False)
+    # created_at = db.Column('created_at', db.DateTime,
+    #                        default=datetime.datetime.utcnow)
+    # updated_at = db.Column('updated_at', db.DateTime,
+    #                        default=datetime.datetime.utcnow)
+    # deleted_at = db.Column('deleted_at', db.DateTime)
+
+    def as_dict(self):
+        return {
+            'product_review_id': self.product_review_id,
+            'product_review_msg': self.product_review_msg,
+            'user_id': self.user_id,
+            'product_id': self.product_id,
+            'product_rating_id': self.product_rating_id
         }
 
 
