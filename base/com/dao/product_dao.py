@@ -1,31 +1,29 @@
+from sqlalchemy import func
 from base import db
 from base.com.vo.product_vo import ProductVO, ProductCategoryVO, ProductSubCategoryVO, ProductInventoryVO, ProductReviewVO, ProductRatingVO
 
 
+class ProductCategoryDAO():
+    def get_category_id_based_category(self, category_name):
+        category = ProductCategoryVO.query.filter_by(
+            product_category_name=category_name).first()
+        return category.product_category_id
+
+
 class ProductDAO():
-    def get_all_products_based_category(self, category):
-        products = ProductVO.query.all()
-        # datas = db.session.query(ProductVO, ProductCategoryVO,
-        #                          ProductSubCategoryVO, ProductInventoryVO, ProductReviewRatings).join(
-        #                              ProductCategoryVO, ProductVO.product_category_id == ProductCategoryVO.product_category_id
-        # ).join(
-        #     ProductSubCategoryVO, ProductVO.product_subcategory_id == ProductSubCategoryVO.product_subcategory_id
-        # ).join(
-        #     ProductInventoryVO, ProductVO.product_inventory_id == ProductInventoryVO.product_inventory_id
-        # ).join(
-        #     ProductReviewRatings, ProductVO.product_review_id == ProductReviewRatings.product_review_rating_id
-        # ).all()
-        # dataList = []
-        # for i in datas:
-        #     datadict={}
-        #     datadict.update(i[0].as_dict())
-        #     datadict.update(i[1].as_dict())
-        #     datadict.update(i[2].as_dict())
-        #     datadict.update(i[3].as_dict())
-        #     datadict.update(i[4].as_dict())
-        #     dataList.append(datadict)
-        # return dataList
-        return [product.as_dict() for product in products]
+    def get_all_products_based_category(self, category_id):
+        products = ProductVO.query.filter_by(
+            product_category_id=category_id).all()
+        data_list = []
+        for product in products:
+            data_dict = {}
+            data_dict.update(product.as_dict())
+            avg_rating = db.session.query(func.avg(ProductRatingVO.product_rating)).filter_by(
+                product_id=product.product_id).scalar()
+            avg_rating = 0 if not avg_rating else avg_rating
+            data_dict['avg_rating'] = avg_rating
+            data_list.append(data_dict)
+        return data_list
 
 
 class ReviewsRatingsDAO():

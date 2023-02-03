@@ -2,23 +2,29 @@ from flask import make_response, request
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from base import app
 from base.com.vo.product_vo import ProductVO
-from base.com.dao.product_dao import ProductDAO, ReviewsRatingsDAO
+from base.com.dao.product_dao import ProductDAO, ProductCategoryDAO, ReviewsRatingsDAO
 
 
 @app.route('/api/a3/products')
 @jwt_required()
 def get_products():
     product_dao = ProductDAO()
+    product_category_dao = ProductCategoryDAO()
     category = request.args.get('category')
     if not category:
         return make_response({"msg": "Query param not correct"}, 400)
     else:
-        data = product_dao.get_all_products_based_category(category)
-        if len(data) != 0:
-            return make_response({"products": data}, 200)
-        else:
-            return make_response({"msg": "No products found"}, 400)
-
+        try:
+            category_id = product_category_dao.get_category_id_based_category(
+                category)
+            data = product_dao.get_all_products_based_category(category_id)
+            if len(data) != 0:
+                return make_response({"products": data}, 200)
+            else:
+                return make_response({"msg": "No products found"}, 400)
+        except AttributeError:
+            return make_response({"msg": "No products found for given category"}, 400)
+            
 
 @app.route('/api/a3/user/reviews')
 @jwt_required()
