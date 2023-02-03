@@ -34,8 +34,23 @@ class ProductDAO():
             data_list.append(data_dict)
         return data_list
 
+    def get_single_product(self, product_id):
+        product = db.session.query(ProductVO, ProductCategoryVO, ProductSubCategoryVO,
+                                   ProductInventoryVO).join(
+            ProductCategoryVO, ProductVO.product_category_id == ProductCategoryVO.product_category_id
+        ).join(
+            ProductSubCategoryVO, ProductVO.product_subcategory_id == ProductSubCategoryVO.product_subcategory_id
+        ).join(
+            ProductInventoryVO, ProductVO.product_inventory_id == ProductInventoryVO.product_inventory_id
+        ).filter(ProductVO.product_id == product_id).first()
 
-class ReviewsRatingsDAO():
+        data_dict = {}
+        for item in product:
+            data_dict.update(item.as_dict())
+        return data_dict
+
+
+class ProductReviewsRatingsDAO():
     def get_reviews_by_user(self, user_id):
         reviews = ProductReviewVO.query.filter_by(user_id=user_id).all()
         return [review.as_dict() for review in reviews]
