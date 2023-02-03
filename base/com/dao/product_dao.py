@@ -58,3 +58,7 @@ class ProductReviewsRatingsDAO():
     def get_ratings_by_user(self, user_id):
         ratings = ProductRatingVO.query.filter_by(user_id=user_id).all()
         return [rating.as_dict() for rating in ratings]
+
+    def get_reviews_by_product(self, product_id):
+        reviews = ProductReviewVO.query.filter_by(product_id=product_id).all()
+        return [review.as_dict() for review in reviews]

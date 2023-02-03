@@ -42,6 +42,20 @@ def get_one_product(id):
         return make_response({"msg": "Invalid id"}, 400)
 
 
+@app.route(f'{product_api_path}/reviews/<int:id>')
+@jwt_required()
+def get_one_product_reviews(id):
+    product_review_rating_dao = ProductReviewsRatingsDAO()
+    try:
+        data = product_review_rating_dao.get_reviews_by_product(id)
+        if not data:
+            return make_response({"msg": "No reviews found"}, 400)
+        else:
+            return make_response({"reviews": data}, 200)
+    except TypeError:
+        return make_response({"msg": "Invalid id"}, 400)
+
+
 @app.route(f'{product_api_path}/categories')
 @jwt_required()
 def get_all_categories():
