@@ -56,9 +56,9 @@ def auth_login():
             return make_response({"msg": "User doesn't exists"}, 400)
 
 
-@app.route(f'{auth_api_path}/get-access-token', methods=['POST'])
+@app.route(f'{auth_api_path}/get-access-token', methods=['GET'])
 @jwt_required(refresh=True)
 def get_access_token():
     identity = get_jwt_identity()
     access_token = create_access_token(identity=identity)
-    return make_response({"accessToken": access_token}, 201)
+    return make_response({"accessToken": access_token, "user": identity}, 201)
