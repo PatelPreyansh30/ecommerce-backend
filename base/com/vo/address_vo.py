@@ -9,13 +9,15 @@ class DeliveryAddressVO(db.Model):
                            primary_key=True, autoincrement=True)
     user_id = db.Column('user_id', db.ForeignKey(
         UserVO.user_id, ondelete='CASCADE', onupdate='CASCADE'), nullable=False)
-    name = db.Column('name', db.String(250), nullable=False)
+    name = db.Column('name', db.String(255), nullable=False)
     address_line1 = db.Column('address_line1', db.Text, nullable=False)
     address_line2 = db.Column('address_line2', db.Text, nullable=False)
-    city = db.Column('city', db.String(250), nullable=False)
-    postal_code = db.Column('postal_code', db.String(250), nullable=False)
-    country = db.Column('country', db.String(250), nullable=False)
-    mobile = db.Column('mobile', db.String(250), nullable=False)
+    area = db.Column('area', db.String(255), nullable=False)
+    city = db.Column('city', db.String(255), nullable=False)
+    state = db.Column('state', db.String(255), nullable=False)
+    country = db.Column('country', db.String(255), nullable=False)
+    postal_code = db.Column('postal_code', db.String(255), nullable=False)
+    mobile = db.Column('mobile', db.String(255), nullable=False)
     created_at = db.Column('created_at', db.DateTime,
                            default=datetime.datetime.utcnow)
     updated_at = db.Column('updated_at', db.DateTime,
@@ -28,11 +30,12 @@ class DeliveryAddressVO(db.Model):
             'address_id': self.address_id,
             'address_line1': self.address_line1,
             'address_line2': self.address_line2,
+            'area': self.area,
             'city': self.city,
-            'postal_code': self.postal_code,
+            'state': self.state,
             'country': self.country,
+            'postal_code': self.postal_code,
             'mobile': self.mobile,
-            'address_line2': self.address_line2,
         }
 
 
