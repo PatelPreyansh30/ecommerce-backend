@@ -66,16 +66,23 @@ def specific_delivery_address(id):
             return make_response({"msg": f"No addesses found for {id} id"}, 404)
 
     if request.method == 'PUT':
-        delivery_address_vo.address_id = id
-        delivery_address_vo.user_id = user_id
-        delivery_address_vo.name = request.json.get("name")
-        delivery_address_vo.address_line1 = request.json.get("line1")
-        delivery_address_vo.address_line2 = request.json.get("line2")
-        delivery_address_vo.city = request.json.get("city")
-        delivery_address_vo.postal_code = request.json.get("postalCode")
-        delivery_address_vo.country = request.json.get("country")
-        delivery_address_vo.mobile = request.json.get("mobile")
-        delivery_address_vo.updated_at = datetime.utcnow()
+        try:
+            delivery_address_vo.address_id = id
+            delivery_address_vo.user_id = user_id
+            delivery_address_vo.name = request.json.get("name")
+            delivery_address_vo.address_line1 = request.json.get("line1")
+            delivery_address_vo.address_line2 = request.json.get("line2")
+            delivery_address_vo.area = request.json.get("area")
+            delivery_address_vo.city = request.json.get("city")
+            delivery_address_vo.state = request.json.get("state")
+            delivery_address_vo.country = request.json.get("country")
+            delivery_address_vo.postal_code = request.json.get("postalCode")
+            delivery_address_vo.mobile = request.json.get("mobile")
+            delivery_address_vo.updated_at = datetime.utcnow()
 
-        delivery_address_dao.update_user_specific_address(delivery_address_vo)
-        return make_response({"msg": "Address updated successfully"}, 201)
+            delivery_address_dao.update_user_specific_address(
+                delivery_address_vo)
+            return make_response({"msg": "Address updated successfully"}, 201)
+        except sqlalchemy.exc.OperationalError and sqlalchemy.exc.IntegrityError as e:
+            print(e)
+            return make_response({"msg": "Some error occured, please try again!!"}, 400)
