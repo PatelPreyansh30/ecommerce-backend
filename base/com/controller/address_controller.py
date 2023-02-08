@@ -39,7 +39,7 @@ def multiple_delivery_address():
             delivery_address_vo.mobile = request.json.get("mobile")
 
             delivery_address_dao.add_address(delivery_address_vo)
-            return make_response({"msg": "Address added successfully"}, 201)
+            return make_response({"msg": "Address added successfully", "address": delivery_address_vo.as_dict()}, 201)
         except sqlalchemy.exc.OperationalError and sqlalchemy.exc.IntegrityError:
             return make_response({"msg": "Some error occured, please try again!!"}, 400)
 
