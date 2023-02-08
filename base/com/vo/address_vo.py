@@ -47,9 +47,7 @@ class CountryVO(db.Model):
         255), nullable=False, unique=True)
 
     def as_dict(self):
-        return {
-            'country_name': self.country_name
-        }
+        return self.country_name
 
 
 class StateVO(db.Model):
@@ -61,9 +59,7 @@ class StateVO(db.Model):
                              nullable=False)
 
     def as_dict(self):
-        return {
-            'state_name': self.state_name
-        }
+        return self.state_name
 
 
 class CityVO(db.Model):
@@ -76,9 +72,7 @@ class CityVO(db.Model):
                            nullable=False)
 
     def as_dict(self):
-        return {
-            'city_name': self.city_name
-        }
+        return self.city_name
 
 
 with app.app_context():
