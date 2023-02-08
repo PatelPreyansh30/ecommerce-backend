@@ -43,15 +43,12 @@ class CountryVO(db.Model):
     __tablename__ = 'country_table'
     country_id = db.Column('country_id', db.Integer,
                            primary_key=True, autoincrement=True)
-    country_name = db.Column('country_name', db.String(255), nullable=False)
-    country_iso_code = db.Column(
-        'country_iso_code', db.String(255), nullable=False, unique=True)
+    country_name = db.Column('country_name', db.String(
+        255), nullable=False, unique=True)
 
     def as_dict(self):
         return {
-            # 'country_id': self.country_id,
-            'country_name': self.country_name,
-            'country_iso_code': self.country_iso_code
+            'country_name': self.country_name
         }
 
 
@@ -59,18 +56,13 @@ class StateVO(db.Model):
     __tablename__ = 'state_table'
     state_id = db.Column('state_id', db.Integer,
                          primary_key=True, autoincrement=True)
-    state_name = db.Column('state_name', db.String(255), nullable=False)
-    state_iso_code = db.Column('state_iso_code', db.String(
-        255), nullable=False, unique=True)
-    country_iso_code = db.Column('country_iso_code', db.ForeignKey(CountryVO.country_iso_code, ondelete='CASCADE', onupdate='CASCADE'),
-                                 nullable=False)
+    state_name = db.Column('state_name', db.String(255), nullable=False, unique=True)
+    country_name = db.Column('country_name', db.ForeignKey(CountryVO.country_name, ondelete='CASCADE', onupdate='CASCADE'),
+                             nullable=False)
 
     def as_dict(self):
         return {
-            # 'state_id': self.state_id,
-            'state_name': self.state_name,
-            # 'country_iso_code': self.country_iso_code,
-            'state_iso_code': self.state_iso_code
+            'state_name': self.state_name
         }
 
 
@@ -80,14 +72,12 @@ class CityVO(db.Model):
                         primary_key=True, autoincrement=True)
     city_name = db.Column('city_name', db.String(255),
                           nullable=False, unique=True)
-    state_iso_code = db.Column('state_iso_code', db.ForeignKey(StateVO.state_iso_code, ondelete='CASCADE', onupdate='CASCADE'),
-                               nullable=False)
+    state_name = db.Column('state_name', db.ForeignKey(StateVO.state_name, ondelete='CASCADE', onupdate='CASCADE'),
+                           nullable=False)
 
     def as_dict(self):
         return {
-            # 'city_id': self.city_id,
-            'city_name': self.city_name,
-            'state_iso_code': self.state_iso_code
+            'city_name': self.city_name
         }
 
 
