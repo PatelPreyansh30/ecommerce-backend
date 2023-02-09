@@ -7,11 +7,10 @@ from base import app
 from base.com.dao.address_dao import DeliveryAddressDAO
 from base.com.vo.address_vo import DeliveryAddressVO
 
-address_api_path = '/api/a2'
-specific_address_api_path = '/api/a2/address'
+address_api_path = '/api/a4/user/address'
 
 
-@app.route(f'{address_api_path}/addresses', methods=['GET', 'POST'])
+@app.route(f'{address_api_path}', methods=['GET', 'POST'])
 @jwt_required()
 def multiple_delivery_address():
     delivery_address_dao = DeliveryAddressDAO()
@@ -44,7 +43,7 @@ def multiple_delivery_address():
             return make_response({"msg": "Some error occured, please try again!!"}, 400)
 
 
-@app.route(f'{specific_address_api_path}/<int:id>', methods=['GET', 'DELETE', 'PUT'])
+@app.route(f'{address_api_path}/<int:id>', methods=['GET', 'DELETE', 'PUT'])
 @jwt_required()
 def specific_delivery_address(id):
     user_id = get_jwt_identity().get('userId')
