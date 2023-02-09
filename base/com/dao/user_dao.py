@@ -12,3 +12,7 @@ class UserInfoDAO():
     def add_user_profile(self, user_obj):
         db.session.add(user_obj)
         db.session.commit()
+
+    def update_user_profile(self, user_obj):
+        db.session.merge(user_obj)
+        db.session.commit()

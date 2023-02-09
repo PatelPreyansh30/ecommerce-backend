@@ -1,6 +1,7 @@
 from flask import make_response, request
 from flask_jwt_extended import jwt_required, get_jwt_identity
 import sqlalchemy
+import datetime
 from base import app
 from base.com.dao.product_dao import ProductReviewsRatingsDAO
 from base.com.dao.user_dao import UserInfoDAO
@@ -21,7 +22,7 @@ def get_reviews_by_user():
         return make_response({"msg": "No reviews found"}, 400)
 
 
-@app.route(f'{user_api_path}/profile', methods=['GET', 'POST'])
+@app.route(f'{user_api_path}/profile', methods=['GET', 'PUT'])
 @jwt_required()
 def get_user_profile():
     if request.method == 'GET':
@@ -32,20 +33,26 @@ def get_user_profile():
             return make_response({"profile": data}, 200)
         else:
             return make_response({"msg": "No record found"}, 400)
-    elif request.method == 'POST':
+    elif request.method == 'PUT':
         try:
             user_info_dao = UserInfoDAO()
             user_info_vo = UserInfoVO()
             user_id = get_jwt_identity().get('userId')
-
+            user_info_id = request.args.get('userInfoId')
+            
             user_info_vo.user_first_name = request.json.get('firstName')
             user_info_vo.user_last_name = request.json.get('lastName')
             user_info_vo.user_mobile = request.json.get('mobile')
             user_info_vo.user_dob = request.json.get('dob')
             user_info_vo.user_id = user_id
-
-            user_info_dao.add_user_profile(user_info_vo)
-            return make_response({"msg": "Profile successfully aaded"}, 201)
+            user_info_vo.updated_at = datetime.datetime.utcnow()
+            if not user_info_id:
+                user_info_dao.add_user_profile(user_info_vo)
+                return make_response({"msg": "Profile successfully added"}, 201)
+            elif user_info_id:
+                user_info_vo.user_info_id = user_info_id
+                user_info_dao.update_user_profile(user_info_vo)
+                return make_response({"msg": "Profile successfully updated"}, 201)
         except sqlalchemy.exc.IntegrityError as e:
             return make_response({"msg": "Error occured while inserting data"}, 400)
         except Exception as e:

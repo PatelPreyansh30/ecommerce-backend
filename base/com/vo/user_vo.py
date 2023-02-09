@@ -24,6 +24,7 @@ class UserInfoVO(db.Model):
 
     def as_dict(self):
         return {
+            'userInfoId': self.user_info_id,
             'firstName': self.user_first_name,
             'lastName': self.user_last_name,
             'dob': self.user_dob,
