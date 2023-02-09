@@ -4,7 +4,7 @@ from base.com.vo.auth_vo import UserVO
 
 
 class UserInfoVO(db.Model):
-    __tablename__ = 'user_table'
+    __tablename__ = 'user_info_table'
     user_info_id = db.Column('user_info_id', db.Integer,
                              primary_key=True, autoincrement=True)
     user_first_name = db.Column('user_first_name', db.String(255),
