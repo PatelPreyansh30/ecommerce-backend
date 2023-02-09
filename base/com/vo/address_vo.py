@@ -27,14 +27,14 @@ class DeliveryAddressVO(db.Model):
     def as_dict(self):
         return {
             'name': self.name,
-            'address_id': self.address_id,
-            'address_line1': self.address_line1,
-            'address_line2': self.address_line2,
+            'addressId': self.address_id,
+            'line1': self.address_line1,
+            'line2': self.address_line2,
             'area': self.area,
             'city': self.city,
             'state': self.state,
             'country': self.country,
-            'postal_code': self.postal_code,
+            'postalCode': self.postal_code,
             'mobile': self.mobile,
         }
 

@@ -22,7 +22,7 @@ def multiple_delivery_address():
         if len(data) != 0:
             return make_response({"addresses": data}, 200)
         else:
-            return make_response({"msg": f"No addesses found for {user_id} user id"}, 404)
+            return make_response({"msg": f"No addesses found"}, 400)
 
     elif request.method == 'POST':
         try:
