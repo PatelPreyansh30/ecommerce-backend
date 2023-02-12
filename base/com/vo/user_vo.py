@@ -24,7 +24,6 @@ class UserInfoVO(db.Model):
 
     def as_dict(self):
         return {
-            'userInfoId': self.user_info_id,
             'firstName': self.user_first_name,
             'lastName': self.user_last_name,
             'dob': self.user_dob,
@@ -46,12 +45,7 @@ class UserProfilePictureVO(db.Model):
                            default=datetime.datetime.utcnow, nullable=False)
 
     def as_dict(self):
-        return {
-            'userProfilePictureId': self.user_profile_picture_id,
-            'userProfileDataUrl': self.user_profile_data_url,
-            'userId': self.user_id,
-            'updatedAt': self.updated_at,
-        }
+        return self.user_profile_data_url
 
 
 with app.app_context():
