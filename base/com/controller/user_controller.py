@@ -68,6 +68,19 @@ def user_profile_pic():
     user_profile_pic_dao = UserProfilePictureDAO()
     user_profile_pic_vo = UserProfilePictureVO()
 
+    if request.method == 'GET':
+        try:
+            profile_pic = user_profile_pic_dao.get_user_profile_pic(user_id)
+            if profile_pic:
+                encoded_data = base64.b64encode(
+                    profile_pic['userProfileDataUrl']).decode()
+                profile_pic['userProfileDataUrl'] = f'data:image/png;base64,{encoded_data}'
+                return make_response(profile_pic, 200)
+            else:
+                return make_response({"msg": "No record found"}, 400)
+        except Exception as e:
+            return make_response({"msg": "Some error occured, please try again"}, 400)
+
     if request.method == 'PUT':
         try:
             user_profile_pic_vo.user_id = user_id
@@ -77,8 +90,6 @@ def user_profile_pic():
                 'profilePic')
             encoded_data = base64.b64decode(
                 user_profile_data_url.split(',')[1])
-            # encoded_data = base64.b64encode(data).decode()
-            # data_url = f'data:image/png;base64,{encoded_data}'
             user_profile_pic_vo.user_profile_data_url = encoded_data
 
             user_profile_pic_dao.add_user_profile_pic(user_profile_pic_vo)
