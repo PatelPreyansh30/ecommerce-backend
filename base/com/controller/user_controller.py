@@ -1,4 +1,5 @@
 import datetime
+from datetime import datetime
 import base64
 import sqlalchemy
 from flask import make_response, request
@@ -26,37 +27,30 @@ def get_reviews_by_user():
 @app.route(f'{user_api_path}/profile', methods=['GET', 'PUT'])
 @jwt_required()
 def user_profile():
+    user_id = get_jwt_identity().get('userId')
+    user_info_vo = UserInfoVO()
+    user_info_dao = UserInfoDAO()
+
     if request.method == 'GET':
-        user_info_dao = UserInfoDAO()
-        user_id = get_jwt_identity().get('userId')
         data = user_info_dao.get_user_profile(user_id)
+        data['dob'] = data['dob'].strftime(f"%Y-%m-%d")
         if data:
-            return make_response({"profile": data}, 200)
+            return make_response(data, 200)
         else:
             return make_response({"msg": "No record found"}, 400)
 
     elif request.method == 'PUT':
         try:
-            user_info_dao = UserInfoDAO()
-            user_info_vo = UserInfoVO()
-            user_id = get_jwt_identity().get('userId')
-            user_info_id = request.args.get('userInfoId')
+            first_name = request.json.get('firstName')
+            last_name = request.json.get('lastName')
+            mobile = request.json.get('mobile')
+            dob = request.json.get('dob')
 
-            user_info_vo.user_first_name = request.json.get('firstName')
-            user_info_vo.user_last_name = request.json.get('lastName')
-            user_info_vo.user_mobile = request.json.get('mobile')
-            user_info_vo.user_dob = request.json.get('dob')
-            user_info_vo.user_id = user_id
-            user_info_vo.updated_at = datetime.datetime.utcnow()
-            if not user_info_id:
-                user_info_dao.add_user_profile(user_info_vo)
-                return make_response({"msg": "Profile successfully added"}, 201)
-            elif user_info_id:
-                user_info_vo.user_info_id = user_info_id
-                user_info_dao.update_user_profile(user_info_vo)
-                return make_response({"msg": "Profile successfully updated"}, 201)
+            user_info_dao.add_user_profile(
+                user_id, first_name, last_name, dob, mobile)
+            return make_response({"msg": "Profile successfully added"}, 201)
         except sqlalchemy.exc.IntegrityError as e:
-            return make_response({"msg": "Error occured while inserting data"}, 400)
+            return make_response({"msg": "Your profile already added"}, 400)
         except Exception as e:
             return make_response({"msg": "Something went wrong, try again"}, 400)
 
@@ -83,16 +77,11 @@ def user_profile_pic():
 
     if request.method == 'PUT':
         try:
-            user_profile_pic_vo.user_id = user_id
-            user_profile_pic_vo.updated_at = datetime.datetime.utcnow()
-
-            user_profile_data_url = request.json.get(
-                'profilePic')
+            user_profile_data_url = request.json.get('profilePic')
             encoded_data = base64.b64decode(
                 user_profile_data_url.split(',')[1])
-            user_profile_pic_vo.user_profile_data_url = encoded_data
 
-            user_profile_pic_dao.add_user_profile_pic(user_profile_pic_vo)
-            return make_response({"msg": "Profile picture successfully added"}, 201)
+            user_profile_pic_dao.add_user_profile_pic(user_id, encoded_data)
+            return make_response({"msg": "Profile image successfully added"}, 201)
         except Exception as e:
             return make_response({"msg": "Something went wrong, try again"}, 400)
