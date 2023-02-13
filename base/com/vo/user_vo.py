@@ -17,6 +17,8 @@ class UserInfoVO(db.Model):
         255), nullable=False, unique=True)
     user_id = db.Column('user_id', db.ForeignKey(
         UserVO.user_id, ondelete='CASCADE', onupdate='CASCADE'), nullable=False, unique=True)
+    user_profile_data_url = db.Column(
+        'user_profile_data_url', db.LargeBinary(length=(2 * 1024 * 1024)), nullable=False)
     created_at = db.Column('created_at', db.DateTime,
                            default=datetime.datetime.utcnow)
     updated_at = db.Column('updated_at', db.DateTime,
@@ -28,24 +30,8 @@ class UserInfoVO(db.Model):
             'lastName': self.user_last_name,
             'dob': self.user_dob,
             'mobile': self.user_mobile,
+            'profilePic': self.user_profile_data_url,
         }
-
-
-class UserProfilePictureVO(db.Model):
-    __tablename__ = 'user_profile_picture_table'
-    user_profile_picture_id = db.Column('user_profile_picture_id', db.Integer,
-                                        primary_key=True, autoincrement=True)
-    user_profile_data_url = db.Column(
-        'user_profile_data_url', db.LargeBinary(length=(2 * 1024 * 1024)), nullable=False)
-    user_id = db.Column('user_id', db.ForeignKey(
-        UserVO.user_id, ondelete='CASCADE', onupdate='CASCADE'), nullable=False, unique=True)
-    created_at = db.Column('created_at', db.DateTime,
-                           default=datetime.datetime.utcnow, nullable=False)
-    updated_at = db.Column('updated_at', db.DateTime,
-                           default=datetime.datetime.utcnow, nullable=False)
-
-    def as_dict(self):
-        return self.user_profile_data_url
 
 
 with app.app_context():
