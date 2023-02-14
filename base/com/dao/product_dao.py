@@ -33,6 +33,21 @@ class ProductDAO():
             data_dict['avg_rating'] = avg_rating
             data_list.append(data_dict)
         return data_list
+    
+    def get_top_products_based_rating(self, category_id):
+        products = ProductVO.query.filter_by(
+            product_category_id=category_id).all()
+        data_list = []
+        for product in products:
+            data_dict = {}
+            data_dict.update(product.as_dict())
+            avg_rating = db.session.query(func.avg(ProductRatingVO.product_rating)).filter_by(
+                product_id=product.product_id).scalar()
+            avg_rating = 0 if not avg_rating else avg_rating
+            data_dict['avg_rating'] = avg_rating
+            data_list.append(data_dict)
+        data_list = sorted(data_list, key=lambda d: d['avg_rating'], reverse=True)[:5]
+        return data_list
 
     def get_single_product(self, product_id):
         product = db.session.query(ProductVO, ProductCategoryVO, ProductSubCategoryVO,

@@ -79,3 +79,23 @@ def get_subcategories():
             return make_response({"categories": data}, 200)
         else:
             return make_response({"msg": "No categories found"}, 400)
+
+@app.route(f'{product_api_path}/get-top-products')
+@jwt_required()
+def get_top_products():
+    product_dao = ProductDAO()
+    product_category_dao = ProductCategoryDAO()
+    category = request.args.get('category')
+    if not category:
+        return make_response({"msg": "Query param not correct"}, 400)
+    else:
+        try:
+            category_id = product_category_dao.get_category_id_based_category(
+                category)
+            data = product_dao.get_top_products_based_rating(category_id)
+            if len(data) != 0:
+                return make_response({"products": data}, 200)
+            else:
+                return make_response({"msg": "No products found"}, 400)
+        except AttributeError:
+            return make_response({"msg": "No products found for given category"}, 400)
