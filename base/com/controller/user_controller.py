@@ -5,6 +5,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from base import app
 from base.com.dao.product_dao import ProductReviewsRatingsDAO
 from base.com.dao.user_dao import UserInfoDAO
+from base.com.dao.auth_dao import UserDAO
 
 user_api_path = '/api/a4/user'
 
@@ -60,3 +61,20 @@ def user_profile():
             return make_response({"msg": "Your profile already added"}, 400)
         except Exception as e:
             return make_response({"msg": "Something went wrong, try again"}, 400)
+
+
+@app.route(f'{user_api_path}/update-password', methods=['PUT'])
+@jwt_required()
+def user_update_password():
+    user_id = get_jwt_identity().get('userId')
+    user_dao = UserDAO()
+
+    if request.method == 'PUT':
+        user_new_password = request.json.get('newPassword')
+        updation_status = user_dao.update_password_with_user(
+            user_id, user_new_password)
+
+        if updation_status:
+            return make_response({"msg": "Profile password successfully updated"}, 201)
+        else:
+            return make_response({"msg": "Error occured, Please try again"}, 400)
