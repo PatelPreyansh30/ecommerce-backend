@@ -12,10 +12,9 @@ class ProductCategoryVO(db.Model):
     product_category_description = db.Column(
         'product_category_description', db.Text)
     # created_at = db.Column('created_at', db.DateTime,
-    #                        default=datetime.datetime.utcnow)
+    #                        default=datetime.datetime.utcnow, nullable=False)
     # updated_at = db.Column('updated_at', db.DateTime,
-    #                        default=datetime.datetime.utcnow)
-    # deleted_at = db.Column('deleted_at', db.DateTime)
+    #                        default=datetime.datetime.utcnow, nullable=False)
 
     def as_dict(self):
         return {
@@ -36,10 +35,9 @@ class ProductSubCategoryVO(db.Model):
     product_category_id = db.Column('product_category_id', db.ForeignKey(
         ProductCategoryVO.product_category_id, ondelete='CASCADE', onupdate='CASCADE'), nullable=False)
     # created_at = db.Column('created_at', db.DateTime,
-    #                        default=datetime.datetime.utcnow)
+    #                        default=datetime.datetime.utcnow, nullable=False)
     # updated_at = db.Column('updated_at', db.DateTime,
-    #                        default=datetime.datetime.utcnow)
-    # deleted_at = db.Column('deleted_at', db.DateTime)
+    #                        default=datetime.datetime.utcnow, nullable=False)
 
     def as_dict(self):
         return {
@@ -57,10 +55,9 @@ class ProductInventoryVO(db.Model):
     product_inventory_quantity = db.Column(
         'product_inventory_quantity', db.Integer, nullable=True)
     # created_at = db.Column('created_at', db.DateTime,
-    #                        default=datetime.datetime.utcnow)
+    #                        default=datetime.datetime.utcnow, nullable=False)
     # updated_at = db.Column('updated_at', db.DateTime,
-    #                        default=datetime.datetime.utcnow)
-    # deleted_at = db.Column('deleted_at', db.DateTime)
+    #                        default=datetime.datetime.utcnow, nullable=False)
 
     def as_dict(self):
         return {
@@ -84,10 +81,9 @@ class ProductVO(db.Model):
     product_inventory_id = db.Column('product_inventory_id', db.ForeignKey(
         ProductInventoryVO.product_inventory_id, ondelete='CASCADE', onupdate='CASCADE'), nullable=False)
     # created_at = db.Column('created_at', db.DateTime,
-    #                        default=datetime.datetime.utcnow)
+    #                        default=datetime.datetime.utcnow, nullable=False)
     # updated_at = db.Column('updated_at', db.DateTime,
-    #                        default=datetime.datetime.utcnow)
-    # deleted_at = db.Column('deleted_at', db.DateTime)
+    #                        default=datetime.datetime.utcnow, nullable=False)
 
     def as_dict(self):
         return {

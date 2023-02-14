@@ -19,10 +19,9 @@ class DeliveryAddressVO(db.Model):
     postal_code = db.Column('postal_code', db.String(255), nullable=False)
     mobile = db.Column('mobile', db.String(255), nullable=False)
     created_at = db.Column('created_at', db.DateTime,
-                           default=datetime.datetime.utcnow)
+                           default=datetime.datetime.utcnow, nullable=False)
     updated_at = db.Column('updated_at', db.DateTime,
-                           default=datetime.datetime.utcnow)
-    deleted_at = db.Column('deleted_at', db.DateTime)
+                           default=datetime.datetime.utcnow, nullable=False)
 
     def as_dict(self):
         return {

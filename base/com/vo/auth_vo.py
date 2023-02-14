@@ -10,15 +10,14 @@ class UserVO(db.Model):
                            nullable=False, unique=True)
     user_password = db.Column('user_password', db.String(250), nullable=False)
     created_at = db.Column('created_at', db.DateTime,
-                           default=datetime.datetime.utcnow)
+                           default=datetime.datetime.utcnow, nullable=False)
     updated_at = db.Column('updated_at', db.DateTime,
-                           default=datetime.datetime.utcnow)
-    deleted_at = db.Column('deleted_at', db.DateTime)
+                           default=datetime.datetime.utcnow, nullable=False)
 
     def as_dict(self):
         return {
-            'user_id': self.user_id,
-            'user_email': self.user_email
+            'userId': self.user_id,
+            'userEmail': self.user_email
         }
 
 
