@@ -1,3 +1,4 @@
+import datetime
 from base import db, app
 from base.com.vo.auth_vo import UserVO
 
@@ -18,9 +19,9 @@ class ProductCategoryVO(db.Model):
 
     def as_dict(self):
         return {
-            'product_category_id': self.product_category_id,
-            'product_category_name': self.product_category_name,
-            'product_category_description': self.product_category_description
+            'productCategoryId': self.product_category_id,
+            'productCategoryName': self.product_category_name,
+            'productCategoryDescription': self.product_category_description
         }
 
 
@@ -42,10 +43,10 @@ class ProductSubCategoryVO(db.Model):
 
     def as_dict(self):
         return {
-            'product_subcategory_id': self.product_subcategory_id,
-            'product_subcategory_name': self.product_subcategory_name,
-            'product_subcategory_description': self.product_subcategory_description,
-            'product_category_id': self.product_category_id
+            'productSubcategoryId': self.product_subcategory_id,
+            'productSubcategoryName': self.product_subcategory_name,
+            'productSubcategoryDescription': self.product_subcategory_description,
+            'productCategoryId': self.product_category_id
         }
 
 
@@ -63,8 +64,8 @@ class ProductInventoryVO(db.Model):
 
     def as_dict(self):
         return {
-            'product_inventory_id': self.product_inventory_id,
-            'product_inventory_quantity': self.product_inventory_quantity
+            'productInventoryId': self.product_inventory_id,
+            'productInventoryQuantity': self.product_inventory_quantity
         }
 
 
@@ -90,13 +91,13 @@ class ProductVO(db.Model):
 
     def as_dict(self):
         return {
-            'product_id': self.product_id,
-            'product_name': self.product_name,
-            'product_description': self.product_description,
-            'product_price': self.product_price,
-            'product_category_id': self.product_category_id,
-            'product_subcategory_id': self.product_subcategory_id,
-            'product_inventory_id': self.product_inventory_id
+            'productId': self.product_id,
+            'productName': self.product_name,
+            'productDescription': self.product_description,
+            'productPrice': self.product_price,
+            'productCategoryId': self.product_category_id,
+            'productSubcategoryId': self.product_subcategory_id,
+            'productInventoryId': self.product_inventory_id
         }
 
 
@@ -108,17 +109,16 @@ class ProductRatingVO(db.Model):
         'product_rating', db.Float, nullable=False)
     product_id = db.Column('product_id', db.ForeignKey(
         ProductVO.product_id, ondelete='CASCADE', onupdate='CASCADE'), nullable=False)
-    # created_at = db.Column('created_at', db.DateTime,
-    #                        default=datetime.datetime.utcnow)
-    # updated_at = db.Column('updated_at', db.DateTime,
-    #                        default=datetime.datetime.utcnow)
-    # deleted_at = db.Column('deleted_at', db.DateTime)
+    created_at = db.Column('created_at', db.DateTime,
+                           default=datetime.datetime.utcnow, nullable=False)
+    updated_at = db.Column('updated_at', db.DateTime,
+                           default=datetime.datetime.utcnow, nullable=False)
 
     def as_dict(self):
         return {
-            'product_rating_id': self.product_rating_id,
-            'product_rating': self.product_rating,
-            'product_id': self.product_id
+            'productRatingId': self.product_rating_id,
+            'productRating': self.product_rating,
+            'productId': self.product_id
         }
 
 
@@ -134,19 +134,19 @@ class ProductReviewVO(db.Model):
         ProductVO.product_id, ondelete='CASCADE', onupdate='CASCADE'), nullable=False)
     product_rating_id = db.Column('product_rating_id', db.ForeignKey(
         ProductRatingVO.product_rating_id, ondelete='CASCADE', onupdate='CASCADE'), nullable=False)
-    # created_at = db.Column('created_at', db.DateTime,
-    #                        default=datetime.datetime.utcnow)
-    # updated_at = db.Column('updated_at', db.DateTime,
-    #                        default=datetime.datetime.utcnow)
-    # deleted_at = db.Column('deleted_at', db.DateTime)
+    created_at = db.Column('created_at', db.DateTime,
+                           default=datetime.datetime.utcnow, nullable=False)
+    updated_at = db.Column('updated_at', db.DateTime,
+                           default=datetime.datetime.utcnow, nullable=False)
 
     def as_dict(self):
         return {
-            'product_review_id': self.product_review_id,
-            'product_review_msg': self.product_review_msg,
-            'user_id': self.user_id,
-            'product_id': self.product_id,
-            'product_rating_id': self.product_rating_id
+            'productReviewId': self.product_review_id,
+            'productReviewMsg': self.product_review_msg,
+            'userId': self.user_id,
+            'productId': self.product_id,
+            'productRatingId': self.product_rating_id,
+            'updatedAt': self.updated_at
         }
 
 

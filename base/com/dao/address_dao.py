@@ -35,18 +35,18 @@ class CountryDAO():
 
 
 class StateDAO():
-    def get_state_based_on_country(self, country_iso_code):
+    def get_state_based_on_country(self, country_name):
+        states = StateVO.query.filter_by(
+            country_name=country_name).all()
+        return [data.as_dict() for data in states]
         # states = db.session.query(StateVO, CountryVO).join(
         #     CountryVO, StateVO.country_iso_code == CountryVO.country_iso_code).filter_by(country_iso_code=country_iso_code).all()
-        states = StateVO.query.filter_by(
-            country_iso_code=country_iso_code).all()
-        return [data.as_dict() for data in states]
 
 
 class CityDAO():
-    def get_citie_based_on_state(self, state_iso_code):
+    def get_citie_based_on_state(self, state_name):
+        cities = CityVO.query.filter_by(state_name=state_name).all()
+        return [data.as_dict() for data in cities]
         # cities = db.session.query(CountryVO, StateVO, CityVO).join(
         #     StateVO, CountryVO.country_iso_code == StateVO.country_iso_code).join(
         #         CityVO, CityVO.state_iso_code == StateVO.state_iso_code).filter(CityVO.state_iso_code == state_iso_code).all()
-        cities = CityVO.query.filter_by(state_iso_code=state_iso_code).all()
-        return [data.as_dict() for data in cities]

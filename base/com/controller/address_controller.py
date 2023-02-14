@@ -1,16 +1,16 @@
 from datetime import datetime
 from flask import request, make_response
 from flask_jwt_extended import jwt_required, get_jwt_identity
+import sqlalchemy
 from sqlalchemy.orm.exc import UnmappedInstanceError
 from base import app
 from base.com.dao.address_dao import DeliveryAddressDAO
 from base.com.vo.address_vo import DeliveryAddressVO
 
-address_api_path = '/api/a2'
-specific_address_api_path = '/api/a2/address'
+address_api_path = '/api/a4/user/address'
 
 
-@app.route(f'{address_api_path}/addresses', methods=['GET', 'POST'])
+@app.route(f'{address_api_path}', methods=['GET', 'POST'])
 @jwt_required()
 def multiple_delivery_address():
     delivery_address_dao = DeliveryAddressDAO()
@@ -22,23 +22,28 @@ def multiple_delivery_address():
         if len(data) != 0:
             return make_response({"addresses": data}, 200)
         else:
-            return make_response({"msg": f"No addesses found for {user_id} user id"}, 404)
+            return make_response({"msg": f"No addesses found"}, 400)
 
     elif request.method == 'POST':
-        delivery_address_vo.user_id = user_id
-        delivery_address_vo.name = request.json.get("name")
-        delivery_address_vo.address_line1 = request.json.get("line1")
-        delivery_address_vo.address_line2 = request.json.get("line2")
-        delivery_address_vo.city = request.json.get("city")
-        delivery_address_vo.postal_code = request.json.get("postalCode")
-        delivery_address_vo.country = request.json.get("country")
-        delivery_address_vo.mobile = request.json.get("mobile")
+        try:
+            delivery_address_vo.user_id = user_id
+            delivery_address_vo.name = request.json.get("name")
+            delivery_address_vo.address_line1 = request.json.get("line1")
+            delivery_address_vo.address_line2 = request.json.get("line2")
+            delivery_address_vo.area = request.json.get("area")
+            delivery_address_vo.city = request.json.get("city")
+            delivery_address_vo.state = request.json.get("state")
+            delivery_address_vo.country = request.json.get("country")
+            delivery_address_vo.postal_code = request.json.get("postalCode")
+            delivery_address_vo.mobile = request.json.get("mobile")
 
-        delivery_address_dao.add_address(delivery_address_vo)
-        return make_response({"msg": "Address added successfully"}, 201)
+            delivery_address_dao.add_address(delivery_address_vo)
+            return make_response({"msg": "Address added successfully", "address": delivery_address_vo.as_dict()}, 201)
+        except sqlalchemy.exc.OperationalError and sqlalchemy.exc.IntegrityError:
+            return make_response({"msg": "Some error occured, please try again!!"}, 400)
 
 
-@app.route(f'{specific_address_api_path}/<int:id>', methods=['GET', 'DELETE', 'PUT'])
+@app.route(f'{address_api_path}/<int:id>', methods=['GET', 'DELETE', 'PUT'])
 @jwt_required()
 def specific_delivery_address(id):
     user_id = get_jwt_identity().get('userId')
@@ -60,16 +65,23 @@ def specific_delivery_address(id):
             return make_response({"msg": f"No addesses found for {id} id"}, 404)
 
     if request.method == 'PUT':
-        delivery_address_vo.address_id = id
-        delivery_address_vo.user_id = user_id
-        delivery_address_vo.name = request.json.get("name")
-        delivery_address_vo.address_line1 = request.json.get("line1")
-        delivery_address_vo.address_line2 = request.json.get("line2")
-        delivery_address_vo.city = request.json.get("city")
-        delivery_address_vo.postal_code = request.json.get("postalCode")
-        delivery_address_vo.country = request.json.get("country")
-        delivery_address_vo.mobile = request.json.get("mobile")
-        delivery_address_vo.updated_at = datetime.utcnow()
+        try:
+            delivery_address_vo.address_id = id
+            delivery_address_vo.user_id = user_id
+            delivery_address_vo.name = request.json.get("name")
+            delivery_address_vo.address_line1 = request.json.get("line1")
+            delivery_address_vo.address_line2 = request.json.get("line2")
+            delivery_address_vo.area = request.json.get("area")
+            delivery_address_vo.city = request.json.get("city")
+            delivery_address_vo.state = request.json.get("state")
+            delivery_address_vo.country = request.json.get("country")
+            delivery_address_vo.postal_code = request.json.get("postalCode")
+            delivery_address_vo.mobile = request.json.get("mobile")
+            delivery_address_vo.updated_at = datetime.utcnow()
 
-        delivery_address_dao.update_user_specific_address(delivery_address_vo)
-        return make_response({"msg": "Address updated successfully"}, 201)
+            delivery_address_dao.update_user_specific_address(
+                delivery_address_vo)
+            return make_response({"msg": "Address updated successfully"}, 201)
+        except sqlalchemy.exc.OperationalError and sqlalchemy.exc.IntegrityError as e:
+            print(e)
+            return make_response({"msg": "Some error occured, please try again!!"}, 400)
