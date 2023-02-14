@@ -20,9 +20,9 @@ class UserInfoVO(db.Model):
     user_profile_data_url = db.Column(
         'user_profile_data_url', db.LargeBinary(length=(2 * 1024 * 1024)), nullable=False)
     created_at = db.Column('created_at', db.DateTime,
-                           default=datetime.datetime.utcnow)
+                           default=datetime.datetime.utcnow, nullable=False)
     updated_at = db.Column('updated_at', db.DateTime,
-                           default=datetime.datetime.utcnow)
+                           default=datetime.datetime.utcnow, nullable=False)
 
     def as_dict(self):
         return {
