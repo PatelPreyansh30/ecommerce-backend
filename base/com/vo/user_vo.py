@@ -48,6 +48,9 @@ class UserFavoriteVO(db.Model):
     updated_at = db.Column('updated_at', db.DateTime,
                            default=datetime.datetime.utcnow, nullable=False)
 
+    def as_dict(self):
+        return self.user_favorite_id
+
 
 with app.app_context():
     db.create_all()

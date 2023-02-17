@@ -1,5 +1,6 @@
 from base import db
-from base.com.vo.user_vo import UserInfoVO
+from base.com.vo.user_vo import UserInfoVO, UserFavoriteVO
+from base.com.vo.product_vo import ProductVO
 import datetime
 
 
@@ -33,3 +34,18 @@ class UserInfoDAO():
             )
             db.session.add(user_info)
         db.session.commit()
+
+
+class UserFavoriteDAO():
+    def get_user_favorites(self, user_id):
+        user_favorites = db.session.query(
+            UserFavoriteVO, ProductVO).join(
+            ProductVO, UserFavoriteVO.product_id == ProductVO.product_id
+        ).filter(UserFavoriteVO.user_id == user_id).all()
+        data = []
+        for favorites in user_favorites:
+            data_dict = {}
+            data_dict.update(favorites[0].as_dict())
+            data_dict.update(favorites[1].as_dict())
+            data.append(data_dict)
+        return data
