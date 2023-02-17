@@ -45,6 +45,15 @@ class UserFavoriteDAO():
         data = []
         for favorites in user_favorites:
             data_dict = {}
+            data_dict.update(favorites[0].as_dict())
             data_dict.update(favorites[1].as_dict())
             data.append(data_dict)
         return data
+
+    def post_user_favorites(self, user_id, product_id):
+        user_favorite = UserFavoriteVO(
+            user_id=user_id,
+            product_id=product_id
+        )
+        db.session.add(user_favorite)
+        db.session.commit()

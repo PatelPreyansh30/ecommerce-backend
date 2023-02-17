@@ -49,7 +49,7 @@ class UserFavoriteVO(db.Model):
                            default=datetime.datetime.utcnow, nullable=False)
 
     def as_dict(self):
-        return self.user_favorite_id
+        return {'userFavoriteId': self.user_favorite_id}
 
 
 with app.app_context():
