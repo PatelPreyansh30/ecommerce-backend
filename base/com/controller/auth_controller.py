@@ -59,6 +59,10 @@ def auth_login():
 @app.route(f'{auth_api_path}/get-access-token', methods=['GET'])
 @jwt_required(refresh=True)
 def get_access_token():
+    user_dao = UserDAO()
     identity = get_jwt_identity()
-    access_token = create_access_token(identity=identity)
-    return make_response({"accessToken": access_token, "user": identity}, 201)
+    user = user_dao.get_single_user(identity.get('email'))
+    if user:
+        access_token = create_access_token(identity=identity)
+        return make_response({"accessToken": access_token, "user": identity}, 201)
+    return make_response({"msg": "User doesn't exists"}, 401)
