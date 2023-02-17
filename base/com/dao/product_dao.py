@@ -18,6 +18,21 @@ class ProductCategoryDAO():
             product_category_id=category_id).all()
         return [subcategory.as_dict() for subcategory in subcategories]
 
+    def get_categories_for_header(self):
+        categories = db.session.query(ProductCategoryVO).all()
+        categories_data = []
+        for category in categories:
+            data_dict = {}
+            data_dict['categoryName'] = category.product_category_name
+            subcategories = ProductSubCategoryVO.query.filter_by(
+                product_category_id=category.product_category_id).all()
+            subcategories_data = []
+            for subcategory in subcategories:
+                subcategories_data.append(subcategory.product_subcategory_name)
+            data_dict['subCategories'] = subcategories_data
+            categories_data.append(data_dict)
+        return categories_data
+
 
 class ProductDAO():
     def get_all_products_based_category(self, category_id):
@@ -33,7 +48,7 @@ class ProductDAO():
             data_dict['avg_rating'] = avg_rating
             data_list.append(data_dict)
         return data_list
-    
+
     def get_top_products_based_rating(self, category_id):
         products = ProductVO.query.filter_by(
             product_category_id=category_id).all()
@@ -46,7 +61,8 @@ class ProductDAO():
             avg_rating = 0 if not avg_rating else avg_rating
             data_dict['avg_rating'] = avg_rating
             data_list.append(data_dict)
-        data_list = sorted(data_list, key=lambda d: d['avg_rating'], reverse=True)[:5]
+        data_list = sorted(
+            data_list, key=lambda d: d['avg_rating'], reverse=True)[:5]
         return data_list
 
     def get_single_product(self, product_id):
