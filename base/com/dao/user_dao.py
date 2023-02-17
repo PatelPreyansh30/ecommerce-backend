@@ -45,7 +45,6 @@ class UserFavoriteDAO():
         data = []
         for favorites in user_favorites:
             data_dict = {}
-            data_dict.update(favorites[0].as_dict())
             data_dict.update(favorites[1].as_dict())
             data.append(data_dict)
         return data

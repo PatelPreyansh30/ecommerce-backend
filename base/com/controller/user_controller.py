@@ -4,7 +4,7 @@ from flask import make_response, request
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from base import app
 from base.com.dao.product_dao import ProductReviewsRatingsDAO
-from base.com.dao.user_dao import UserInfoDAO
+from base.com.dao.user_dao import UserInfoDAO, UserFavoriteDAO
 from base.com.dao.auth_dao import UserDAO
 
 user_api_path = '/api/a4/user'
@@ -78,3 +78,16 @@ def user_update_password():
             return make_response({"msg": "Profile password successfully updated"}, 201)
         else:
             return make_response({"msg": "Error occured, Please try again"}, 400)
+
+
+@app.route(f'{user_api_path}/favorites', methods=['GET', 'POST'])
+@jwt_required()
+def user_favorites():
+    user_id = get_jwt_identity().get('userId')
+    user_favorite_dao = UserFavoriteDAO()
+    if request.method == 'GET':
+        data = user_favorite_dao.get_user_favorites(user_id)
+        if len(data) != 0:
+            return make_response({"favorites": data}, 200)
+        else:
+            return make_response({"msg": "No favorites found"}, 400)
