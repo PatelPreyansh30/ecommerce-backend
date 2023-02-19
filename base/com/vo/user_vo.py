@@ -1,6 +1,7 @@
 import datetime
 from base import db, app
 from base.com.vo.auth_vo import UserVO
+from base.com.vo.product_vo import ProductVO
 
 
 class UserInfoVO(db.Model):
@@ -32,6 +33,23 @@ class UserInfoVO(db.Model):
             'mobile': self.user_mobile,
             'profilePic': self.user_profile_data_url,
         }
+
+
+class UserFavoriteVO(db.Model):
+    __tablename__ = 'user_favorite_table'
+    user_favorite_id = db.Column('user_favorite_id', db.Integer,
+                                 primary_key=True, autoincrement=True)
+    user_id = db.Column('user_id', db.ForeignKey(
+        UserVO.user_id, ondelete='CASCADE', onupdate='CASCADE'), nullable=False)
+    product_id = db.Column('product_id', db.ForeignKey(
+        ProductVO.product_id, ondelete='CASCADE', onupdate='CASCADE'), nullable=False, unique=True)
+    created_at = db.Column('created_at', db.DateTime,
+                           default=datetime.datetime.utcnow, nullable=False)
+    updated_at = db.Column('updated_at', db.DateTime,
+                           default=datetime.datetime.utcnow, nullable=False)
+
+    def as_dict(self):
+        return {'userFavoriteId': self.user_favorite_id}
 
 
 with app.app_context():
