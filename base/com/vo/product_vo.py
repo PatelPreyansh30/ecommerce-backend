@@ -10,7 +10,7 @@ class ProductCategoryVO(db.Model):
     category_name = db.Column(
         'category_name', db.String(255), nullable=False)
     category_description = db.Column(
-        'category_description', db.Text)
+        'category_description', db.Text, nullable=False)
     # created_at = db.Column('created_at', db.DateTime,
     #                        default=datetime.datetime.utcnow, nullable=False)
     # updated_at = db.Column('updated_at', db.DateTime,
@@ -20,7 +20,7 @@ class ProductCategoryVO(db.Model):
         return {
             'categoryId': self.category_id,
             'categoryName': self.category_name,
-            'categoryDescription': self.ategory_description
+            'categoryDescription': self.category_description
         }
 
 
@@ -31,7 +31,7 @@ class ProductSubCategoryVO(db.Model):
     subcategory_name = db.Column(
         'subcategory_name', db.String(255), nullable=False)
     subcategory_description = db.Column(
-        'subcategory_description', db.Text)
+        'subcategory_description', db.Text, nullable=False)
     category_id = db.Column('category_id', db.ForeignKey(
         ProductCategoryVO.category_id, ondelete='CASCADE', onupdate='CASCADE'), nullable=False)
     # created_at = db.Column('created_at', db.DateTime,
@@ -109,9 +109,9 @@ class ProductVO(db.Model):
     def as_dict(self):
         return {
             'productId': self.product_id,
-            'name': self.name,
-            'description': self.description,
-            'price': self.price
+            'productName': self.name,
+            'productDescription': self.description,
+            'productPrice': self.price
         }
 
 
