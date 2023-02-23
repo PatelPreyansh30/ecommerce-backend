@@ -112,3 +112,8 @@ class ProductReviewsRatingsDAO():
         })
         db.session.add(review)
         db.session.commit()
+
+    def check_user_review_for_product(self, user_id, product_id):
+        review = db.session.query(ProductReviewVO).filter(
+            ProductReviewVO.user_id == user_id, ProductReviewVO.product_id == product_id).first()
+        return review

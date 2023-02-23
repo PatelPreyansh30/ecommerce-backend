@@ -55,9 +55,14 @@ def add_product_review():
             rating_count = request.json.get("productRatingCount")
             avg_rating = request.json.get("productAvgRating")
 
-            product_review_rating_dao.add_product_review(
-                user_id, product_id, review_msg, rating, rating_count, avg_rating)
-            return make_response({"msg": "Review successfully added"}, 201)
+            existing_review = product_review_rating_dao.check_user_review_for_product(
+                user_id, product_id)
+            if existing_review == None:
+                product_review_rating_dao.add_product_review(
+                    user_id, product_id, review_msg, rating, rating_count, avg_rating)
+                return make_response({"msg": "Review successfully added"}, 201)
+            else:
+                return make_response({"msg": "You have already add review"}, 201)
         except Exception as e:
             print(e)
             return make_response({"msg": "Something went wrong, try again"}, 400)
