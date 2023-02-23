@@ -1,4 +1,5 @@
 from sqlalchemy import func
+import datetime
 from base import db
 from base.com.vo.product_vo import ProductVO, ProductCategoryVO, ProductSubCategoryVO, ProductInventoryVO, ProductDiscountVO, ProductReviewVO
 
@@ -87,7 +88,8 @@ class ProductReviewsRatingsDAO():
         return data_list
 
     def get_reviews_ratings_by_product(self, product_id):
-        reviews = db.session.query(ProductReviewVO).filter_by(product_id=product_id).all()
+        reviews = db.session.query(ProductReviewVO).filter_by(
+            product_id=product_id).all()
         data_list = []
         for review in reviews:
             data_dict = {}
@@ -95,5 +97,18 @@ class ProductReviewsRatingsDAO():
             data_list.append(data_dict)
         return data_list
 
-    def add_product_review(self, product_id, review_msg, rating):
-        pass
+    def add_product_review(self, user_id, product_id, review_msg, rating, rating_count, avg_rating):
+        review = ProductReviewVO(
+            review_msg=review_msg,
+            rating=rating,
+            product_id=product_id,
+            user_id=user_id
+        )
+        updation_of_product = ProductVO.query.filter_by(product_id=product_id).update({
+            ProductVO.product_id: product_id,
+            ProductVO.average_rating: ((rating_count*avg_rating)+rating)/(rating_count+1),
+            ProductVO.rating_count: rating_count+1,
+            ProductVO.updated_at: datetime.datetime.now()
+        })
+        db.session.add(review)
+        db.session.commit()

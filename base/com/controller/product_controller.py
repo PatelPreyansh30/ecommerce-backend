@@ -42,6 +42,27 @@ def get_one_product(id):
         return make_response({"msg": "Invalid id"}, 400)
 
 
+@app.route(f'{product_api_path}/reviews', methods=['POST'])
+@jwt_required()
+def add_product_review():
+    user_id = get_jwt_identity().get('userId')
+    product_review_rating_dao = ProductReviewsRatingsDAO()
+    if request.method == 'POST':
+        try:
+            review_msg = request.json.get("reviewMsg")
+            rating = request.json.get("rating")
+            product_id = request.json.get("productId")
+            rating_count = request.json.get("productRatingCount")
+            avg_rating = request.json.get("productAvgRating")
+
+            product_review_rating_dao.add_product_review(
+                user_id, product_id, review_msg, rating, rating_count, avg_rating)
+            return make_response({"msg": "Review successfully added"}, 201)
+        except Exception as e:
+            print(e)
+            return make_response({"msg": "Something went wrong, try again"}, 400)
+
+
 @app.route(f'{product_api_path}/reviews/<int:id>')
 @jwt_required()
 def get_one_product_reviews(id):
@@ -79,6 +100,7 @@ def get_subcategories():
             return make_response({"categories": data}, 200)
         else:
             return make_response({"msg": "No categories found"}, 400)
+
 
 @app.route(f'{product_api_path}/get-top-products')
 @jwt_required()
