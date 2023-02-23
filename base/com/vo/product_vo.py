@@ -94,6 +94,7 @@ class ProductVO(db.Model):
         'description', db.Text, nullable=False)
     price = db.Column('price', db.Float, nullable=False)
     average_rating = db.Column('average_rating', db.Float, nullable=False)
+    rating_count = db.Column('rating_count', db.Integer, nullable=False)
     category_id = db.Column('category_id', db.ForeignKey(
         ProductCategoryVO.category_id, ondelete='CASCADE', onupdate='CASCADE'), nullable=False)
     subcategory_id = db.Column('subcategory_id', db.ForeignKey(
