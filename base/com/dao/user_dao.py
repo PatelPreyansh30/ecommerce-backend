@@ -56,4 +56,15 @@ class UserFavoriteDAO():
             product_id=product_id
         )
         db.session.add(user_favorite)
+        favorites = db.session.query(
+            UserFavoriteVO, ProductVO).join(
+                ProductVO, UserFavoriteVO.product_id == ProductVO.product_id
+        ).filter(UserFavoriteVO.user_id == user_id, UserFavoriteVO.product_id == product_id).all()
+
+        if len(favorites) > 1:
+            return None
+        data = {}
+        for item in favorites[0]:
+            data.update(item.as_dict())
         db.session.commit()
+        return data

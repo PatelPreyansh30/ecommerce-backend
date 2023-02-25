@@ -99,9 +99,13 @@ def user_favorites():
             return make_response({"msg": "Invalid body"}, 400)
         else:
             try:
-                user_favorite_dao.post_user_favorites(user_id, product_id)
-                return make_response({"msg": "Successfully added in favorites"}, 201)
+                res = user_favorite_dao.post_user_favorites(
+                    user_id, product_id)
+                if not res:
+                    return make_response({'msg': 'Product already added'}, 400)
+                return make_response({"favorite": res, "msg": "Successfully added in favorites"}, 201)
             # except sqlalchemy.exc.IntegrityError:
             #     return make_response({"msg": "Error while storing in database"}, 400)
             except Exception as e:
+                print(e)
                 return make_response({"msg": "Something went wrong, try again"}, 400)

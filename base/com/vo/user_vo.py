@@ -42,7 +42,7 @@ class UserFavoriteVO(db.Model):
     user_id = db.Column('user_id', db.ForeignKey(
         UserVO.user_id, ondelete='CASCADE', onupdate='CASCADE'), nullable=False)
     product_id = db.Column('product_id', db.ForeignKey(
-        ProductVO.product_id, ondelete='CASCADE', onupdate='CASCADE'), nullable=False, unique=True)
+        ProductVO.product_id, ondelete='CASCADE', onupdate='CASCADE'), nullable=False)
     created_at = db.Column('created_at', db.DateTime,
                            default=datetime.datetime.utcnow, nullable=False)
     updated_at = db.Column('updated_at', db.DateTime,
