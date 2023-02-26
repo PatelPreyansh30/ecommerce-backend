@@ -9,6 +9,11 @@ class ProductCategoryDAO():
             product_category_name=category_name).first()
         return category.product_category_id
 
+    def get_subcategory_id_based_subcategory(self, subcategory_name):
+        subcategory = ProductSubCategoryVO.query.filter_by(
+            product_subcategory_name=subcategory_name).first()
+        return subcategory.product_subcategory_id
+
     def get_all_categories(self):
         categories = ProductCategoryVO.query.all()
         return [category.as_dict() for category in categories]
@@ -23,6 +28,20 @@ class ProductDAO():
     def get_all_products_based_category(self, category_id):
         products = ProductVO.query.filter_by(
             product_category_id=category_id).all()
+        data_list = []
+        for product in products:
+            data_dict = {}
+            data_dict.update(product.as_dict())
+            avg_rating = db.session.query(func.avg(ProductRatingVO.product_rating)).filter_by(
+                product_id=product.product_id).scalar()
+            avg_rating = 0 if not avg_rating else avg_rating
+            data_dict['avgRating'] = avg_rating
+            data_list.append(data_dict)
+        return data_list
+
+    def get_all_products_based_subcategory(self, subcategory_id):
+        products = ProductVO.query.filter_by(
+            product_subcategory_id=subcategory_id).all()
         data_list = []
         for product in products:
             data_dict = {}
