@@ -5,64 +5,83 @@ from base.com.vo.auth_vo import UserVO
 
 class ProductCategoryVO(db.Model):
     __tablename__ = 'product_category_table'
-    product_category_id = db.Column(
-        'product_category_id', db.Integer, primary_key=True, autoincrement=True)
-    product_category_name = db.Column(
-        'product_category_name', db.String(255), nullable=False)
-    product_category_description = db.Column(
-        'product_category_description', db.Text)
-    # created_at = db.Column('created_at', db.DateTime,
-    #                        default=datetime.datetime.utcnow, nullable=False)
-    # updated_at = db.Column('updated_at', db.DateTime,
-    #                        default=datetime.datetime.utcnow, nullable=False)
+    category_id = db.Column(
+        'category_id', db.Integer, primary_key=True, autoincrement=True)
+    category_name = db.Column(
+        'category_name', db.String(255), nullable=False)
+    category_description = db.Column(
+        'category_description', db.Text, nullable=False)
+    created_at = db.Column('created_at', db.DateTime,
+                           default=datetime.datetime.utcnow, nullable=False)
+    updated_at = db.Column('updated_at', db.DateTime,
+                           default=datetime.datetime.utcnow, nullable=False)
 
     def as_dict(self):
         return {
-            'productCategoryId': self.product_category_id,
-            'productCategoryName': self.product_category_name,
-            'productCategoryDescription': self.product_category_description
+            'categoryId': self.category_id,
+            'categoryName': self.category_name,
+            'categoryDescription': self.category_description
         }
 
 
 class ProductSubCategoryVO(db.Model):
     __tablename__ = 'product_subcategory_table'
-    product_subcategory_id = db.Column(
-        'product_subcategory_id', db.Integer, primary_key=True, autoincrement=True)
-    product_subcategory_name = db.Column(
-        'product_subcategory_name', db.String(255), nullable=False)
-    product_subcategory_description = db.Column(
-        'product_subcategory_description', db.Text)
-    product_category_id = db.Column('product_category_id', db.ForeignKey(
-        ProductCategoryVO.product_category_id, ondelete='CASCADE', onupdate='CASCADE'), nullable=False)
-    # created_at = db.Column('created_at', db.DateTime,
-    #                        default=datetime.datetime.utcnow, nullable=False)
-    # updated_at = db.Column('updated_at', db.DateTime,
-    #                        default=datetime.datetime.utcnow, nullable=False)
+    subcategory_id = db.Column(
+        'subcategory_id', db.Integer, primary_key=True, autoincrement=True)
+    subcategory_name = db.Column(
+        'subcategory_name', db.String(255), nullable=False)
+    subcategory_description = db.Column(
+        'subcategory_description', db.Text, nullable=False)
+    category_id = db.Column('category_id', db.ForeignKey(
+        ProductCategoryVO.category_id, ondelete='CASCADE', onupdate='CASCADE'), nullable=False)
+    created_at = db.Column('created_at', db.DateTime,
+                           default=datetime.datetime.utcnow, nullable=False)
+    updated_at = db.Column('updated_at', db.DateTime,
+                           default=datetime.datetime.utcnow, nullable=False)
 
     def as_dict(self):
         return {
-            'productSubcategoryId': self.product_subcategory_id,
-            'productSubcategoryName': self.product_subcategory_name,
-            'productSubcategoryDescription': self.product_subcategory_description,
-            'productCategoryId': self.product_category_id
+            'subcategoryId': self.subcategory_id,
+            'subcategoryName': self.subcategory_name,
+            'subcategoryDescription': self.subcategory_description
         }
 
 
 class ProductInventoryVO(db.Model):
     __tablename__ = 'product_inventory_table'
-    product_inventory_id = db.Column(
-        'product_inventory_id', db.Integer, primary_key=True, autoincrement=True)
-    product_inventory_quantity = db.Column(
-        'product_inventory_quantity', db.Integer, nullable=True)
-    # created_at = db.Column('created_at', db.DateTime,
-    #                        default=datetime.datetime.utcnow, nullable=False)
-    # updated_at = db.Column('updated_at', db.DateTime,
-    #                        default=datetime.datetime.utcnow, nullable=False)
+    inventory_id = db.Column(
+        'inventory_id', db.Integer, primary_key=True, autoincrement=True)
+    inventory_quantity = db.Column(
+        'inventory_quantity', db.Integer, nullable=True)
+    created_at = db.Column('created_at', db.DateTime,
+                           default=datetime.datetime.utcnow, nullable=False)
+    updated_at = db.Column('updated_at', db.DateTime,
+                           default=datetime.datetime.utcnow, nullable=False)
 
     def as_dict(self):
         return {
-            'productInventoryId': self.product_inventory_id,
-            'productInventoryQuantity': self.product_inventory_quantity
+            'inventoryId': self.inventory_id,
+            'inventoryQuantity': self.inventory_quantity
+        }
+
+
+class ProductDiscountVO(db.Model):
+    __tablename__ = 'product_discount_table'
+    discount_id = db.Column('discount_id', db.Integer,
+                            primary_key=True, autoincrement=True)
+    discount_name = db.Column('discount_name', db.String(255), nullable=False)
+    discount_percent = db.Column(
+        'discount_percent', db.Integer, nullable=False)
+    created_at = db.Column('created_at', db.DateTime,
+                           default=datetime.datetime.utcnow, nullable=False)
+    updated_at = db.Column('updated_at', db.DateTime,
+                           default=datetime.datetime.utcnow, nullable=False)
+
+    def as_dict(self):
+        return {
+            'discountId': self.discount_id,
+            'discountName': self.discount_name,
+            'discountPercent': self.discount_percent
         }
 
 
@@ -70,41 +89,22 @@ class ProductVO(db.Model):
     __tablename__ = 'product_table'
     product_id = db.Column('product_id', db.Integer,
                            primary_key=True, autoincrement=True)
-    product_name = db.Column('product_name', db.String(250), nullable=False)
-    product_description = db.Column(
-        'product_description', db.Text, nullable=False)
-    product_price = db.Column('product_price', db.Float, nullable=False)
-    product_category_id = db.Column('product_category_id', db.ForeignKey(
-        ProductCategoryVO.product_category_id, ondelete='CASCADE', onupdate='CASCADE'), nullable=False)
-    product_subcategory_id = db.Column('product_subcategory_id', db.ForeignKey(
-        ProductSubCategoryVO.product_subcategory_id, ondelete='CASCADE', onupdate='CASCADE'), nullable=False)
-    product_inventory_id = db.Column('product_inventory_id', db.ForeignKey(
-        ProductInventoryVO.product_inventory_id, ondelete='CASCADE', onupdate='CASCADE'), nullable=False)
-    # created_at = db.Column('created_at', db.DateTime,
-    #                        default=datetime.datetime.utcnow, nullable=False)
-    # updated_at = db.Column('updated_at', db.DateTime,
-    #                        default=datetime.datetime.utcnow, nullable=False)
-
-    def as_dict(self):
-        return {
-            'productId': self.product_id,
-            'productName': self.product_name,
-            'productDescription': self.product_description,
-            'productPrice': self.product_price,
-            'productCategoryId': self.product_category_id,
-            'productSubcategoryId': self.product_subcategory_id,
-            'productInventoryId': self.product_inventory_id
-        }
-
-
-class ProductRatingVO(db.Model):
-    __tablename__ = 'product_rating_table'
-    product_rating_id = db.Column('product_rating_id', db.Integer,
-                                  primary_key=True, autoincrement=True)
-    product_rating = db.Column(
-        'product_rating', db.Float, nullable=False)
-    product_id = db.Column('product_id', db.ForeignKey(
-        ProductVO.product_id, ondelete='CASCADE', onupdate='CASCADE'), nullable=False)
+    name = db.Column('name', db.String(250), nullable=False)
+    description = db.Column(
+        'description', db.Text, nullable=False)
+    price = db.Column('price', db.Float, nullable=False)
+    average_rating = db.Column(
+        'average_rating', db.Float, default=0, nullable=False)
+    rating_count = db.Column('rating_count', db.Integer,
+                             default=0, nullable=False)
+    category_id = db.Column('category_id', db.ForeignKey(
+        ProductCategoryVO.category_id, ondelete='CASCADE', onupdate='CASCADE'), nullable=False)
+    subcategory_id = db.Column('subcategory_id', db.ForeignKey(
+        ProductSubCategoryVO.subcategory_id, ondelete='CASCADE', onupdate='CASCADE'), nullable=False)
+    inventory_id = db.Column('inventory_id', db.ForeignKey(
+        ProductInventoryVO.inventory_id, ondelete='CASCADE', onupdate='CASCADE'), nullable=False)
+    discount_id = db.Column('discount_id', db.ForeignKey(
+        ProductDiscountVO.discount_id, ondelete='CASCADE', onupdate='CASCADE'), nullable=False)
     created_at = db.Column('created_at', db.DateTime,
                            default=datetime.datetime.utcnow, nullable=False)
     updated_at = db.Column('updated_at', db.DateTime,
@@ -112,24 +112,27 @@ class ProductRatingVO(db.Model):
 
     def as_dict(self):
         return {
-            'productRatingId': self.product_rating_id,
-            'productRating': self.product_rating,
-            'productId': self.product_id
+            'productId': self.product_id,
+            'productName': self.name,
+            'productDescription': self.description,
+            'productPrice': self.price,
+            'productAvgRating': self.average_rating,
+            'productRatingCount': self.rating_count
         }
 
 
 class ProductReviewVO(db.Model):
     __tablename__ = 'product_review_table'
-    product_review_id = db.Column('product_review_id', db.Integer,
-                                  primary_key=True, autoincrement=True)
-    product_review_msg = db.Column(
-        'product_review_msg', db.Text, nullable=False)
+    review_id = db.Column('review_id', db.Integer,
+                          primary_key=True, autoincrement=True)
+    review_msg = db.Column(
+        'review_msg', db.Text, nullable=False)
+    rating = db.Column(
+        'rating', db.Float, nullable=False)
     user_id = db.Column('user_id', db.ForeignKey(
         UserVO.user_id, ondelete='CASCADE', onupdate='CASCADE'), nullable=False)
     product_id = db.Column('product_id', db.ForeignKey(
         ProductVO.product_id, ondelete='CASCADE', onupdate='CASCADE'), nullable=False)
-    product_rating_id = db.Column('product_rating_id', db.ForeignKey(
-        ProductRatingVO.product_rating_id, ondelete='CASCADE', onupdate='CASCADE'), nullable=False)
     created_at = db.Column('created_at', db.DateTime,
                            default=datetime.datetime.utcnow, nullable=False)
     updated_at = db.Column('updated_at', db.DateTime,
@@ -137,11 +140,9 @@ class ProductReviewVO(db.Model):
 
     def as_dict(self):
         return {
-            'productReviewId': self.product_review_id,
-            'productReviewMsg': self.product_review_msg,
-            'userId': self.user_id,
-            'productId': self.product_id,
-            'productRatingId': self.product_rating_id,
+            'reviewId': self.review_id,
+            'reviewMsg': self.review_msg,
+            'reviewRating': self.rating,
             'updatedAt': self.updated_at
         }
 
