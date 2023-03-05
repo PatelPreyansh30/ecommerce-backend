@@ -11,11 +11,14 @@ product_api_path = '/api/a3/products'
 @jwt_required()
 def get_products():
     product_dao = ProductDAO()
-    product_category_dao = ProductCategoryDAO()
     category = request.args.get('category')
-    if not category:
-        return make_response({"msg": "Query param not correct"}, 400)
-    else:
+    subcategory = request.args.get('subcategory')
+    print(category)
+    if category:
+        # if not category:
+        #     return make_response({"msg": "Query param not correct"}, 400)
+        # else:
+        product_category_dao = ProductCategoryDAO()
         try:
             category_id = product_category_dao.get_category_id_based_category(
                 category)
@@ -26,9 +29,21 @@ def get_products():
                 return make_response({"msg": "No products found"}, 400)
         except AttributeError:
             return make_response({"msg": "No products found for given category"}, 400)
+    elif subcategory:
+        product_subcategory_dao = ProductCategoryDAO()
+        try:
+            subcategory_id = product_subcategory_dao.get_subcategory_id_based_subcategory(
+                subcategory)
+            data = product_dao.get_all_products_based_subcategory(subcategory_id)
+            if len(data) != 0:
+                return make_response({"products": data}, 200)
+            else:
+                return make_response({"msg": "No products found"}, 400)
+        except AttributeError:
+            return make_response({"msg": "No products found for given subcategory"}, 400)
 
 
-@app.route(f'{product_api_path}/<int:id>')
+@app.route(f'{product_api_path}/<int:id>')  # Products by id
 @jwt_required()
 def get_one_product(id):
     product_dao = ProductDAO()
@@ -79,7 +94,7 @@ def get_one_product_reviews(id):
         return make_response({"reviews": data}, 200)
 
 
-@app.route(f'{product_api_path}/categories')
+@app.route(f'{product_api_path}/categories')  # For all categories
 @jwt_required()
 def get_all_categories():
     product_category_dao = ProductCategoryDAO()
@@ -90,7 +105,7 @@ def get_all_categories():
         return make_response({"msg": "No categories found"}, 400)
 
 
-@app.route(f'{product_api_path}/subcategory')
+@app.route(f'{product_api_path}/subcategory')  # For all subcategories
 @jwt_required()
 def get_subcategories():
     product_category_dao = ProductCategoryDAO()
