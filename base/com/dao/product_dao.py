@@ -94,18 +94,14 @@ class ProductReviewsRatingsDAO():
         return data_list
 
     def get_reviews_ratings_by_product(self, product_id):
-        reviews = db.session.query(ProductReviewVO, UserVO, UserInfoVO).join(
-                UserVO, ProductReviewVO.user_id == UserVO.user_id
-            ).join(
-                UserInfoVO, ProductReviewVO.user_id == UserInfoVO.user_id
-            ).filter(
-            ProductReviewVO.product_id==product_id).all()
+        reviews = db.session.query(ProductReviewVO, UserInfoVO).join(
+            UserInfoVO, ProductReviewVO.user_id == UserInfoVO.user_id
+        ).filter(ProductReviewVO.product_id == product_id).all()
         data_list = []
         for review in reviews:
             data_dict = {}
             data_dict.update(review[0].as_dict())
             data_dict.update(review[1].as_dict())
-            data_dict.update(review[2].as_dict())
             data_list.append(data_dict)
         return data_list
 

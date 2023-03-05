@@ -32,7 +32,7 @@ class UserInfoVO(db.Model):
             'lastName': self.user_last_name,
             'dob': self.user_dob,
             'mobile': self.user_mobile,
-            'profilePic': f'''data: image/png;base64, {base64.b64encode(self.user_profile_data_url).decode()}''',
+            'profilePic': f'''data: image/png;base64,{base64.b64encode(self.user_profile_data_url).decode()}''',
         }
 
 
