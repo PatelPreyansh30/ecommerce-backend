@@ -1,4 +1,5 @@
 import datetime
+import base64
 from base import db, app
 from base.com.vo.auth_vo import UserVO
 from base.com.vo.product_vo import ProductVO
@@ -31,7 +32,7 @@ class UserInfoVO(db.Model):
             'lastName': self.user_last_name,
             'dob': self.user_dob,
             'mobile': self.user_mobile,
-            'profilePic': self.user_profile_data_url,
+            'profilePic': f'''data: image/png;base64, {base64.b64encode(self.user_profile_data_url).decode()}''',
         }
 
 
