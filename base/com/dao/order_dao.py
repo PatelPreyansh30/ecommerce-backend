@@ -20,6 +20,7 @@ class CartDAO():
             cart_object.update(item[1].as_dict())
             cart_object.update(item[2].as_dict())
             cart_object.update(item[3].as_dict())
+            cart_object['isAddedInCart'] = True
             data.append(cart_object)
         return data
 

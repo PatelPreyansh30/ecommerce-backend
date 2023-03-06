@@ -53,6 +53,7 @@ class UserFavoriteDAO():
             data_dict.update(favorites[1].as_dict())
             data_dict.update(favorites[2].as_dict())
             data_dict.update(favorites[3].as_dict())
+            data_dict['isAddedInFavorite'] = True
             data.append(data_dict)
         return data
 
