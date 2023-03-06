@@ -34,10 +34,6 @@ def user_profile():
 
             if profile_data:
                 profile_data['dob'] = profile_data['dob'].strftime(f"%Y-%m-%d")
-                decoded_data = base64.b64encode(
-                    profile_data['profilePic']).decode()
-
-                profile_data['profilePic'] = f'data:image/png;base64,{decoded_data}'
                 return make_response(profile_data, 200)
             else:
                 return make_response({"msg": "No record found"}, 400)
