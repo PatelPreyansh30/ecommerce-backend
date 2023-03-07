@@ -1,4 +1,4 @@
-from sqlalchemy import func
+from sqlalchemy import desc
 import datetime
 from base import db
 from base.com.vo.product_vo import ProductVO, ProductCategoryVO, ProductSubCategoryVO, ProductInventoryVO, ProductDiscountVO, ProductReviewVO
@@ -10,19 +10,9 @@ class ProductCategoryDAO():
             category_name=category_name).first()
         return category.category_id
 
-    def get_subcategory_id_based_subcategory(self, subcategory_name):
-        subcategory = ProductSubCategoryVO.query.filter_by(
-            product_subcategory_name=subcategory_name).first()
-        return subcategory.product_subcategory_id
-
     def get_all_categories(self):
         categories = ProductCategoryVO.query.all()
         return [category.as_dict() for category in categories]
-
-    def get_subcategory_based_category(self, category_id):
-        subcategories = ProductSubCategoryVO.query.filter_by(
-            category_id=category_id).all()
-        return [subcategory.as_dict() for subcategory in subcategories]
 
     def get_categories_for_header(self):
         categories = db.session.query(ProductCategoryVO).all()
@@ -39,11 +29,37 @@ class ProductCategoryDAO():
             categories_data.append(data_dict)
         return categories_data
 
+class ProductSubCategoryDAO():
+    def get_subcategory_id_based_subcategory(self, subcategory_name):
+        subcategory = ProductSubCategoryVO.query.filter_by(
+            subcategory_name=subcategory_name).first()
+        return subcategory.subcategory_id
+
+    def get_subcategory_based_category(self, category_id):
+        subcategories = ProductSubCategoryVO.query.filter_by(
+            category_id=category_id).all()
+        return [subcategory.as_dict() for subcategory in subcategories]
 
 class ProductDAO():
     def get_all_products_based_category(self, category_id):
+        products = db.session.query(ProductVO,ProductSubCategoryVO,ProductDiscountVO).join(
+            ProductSubCategoryVO,ProductVO.subcategory_id == ProductSubCategoryVO.subcategory_id
+        ).join(
+            ProductDiscountVO,ProductVO.discount_id== ProductDiscountVO.discount_id
+        ).filter(
+           ProductVO.category_id==category_id).all()
+        data_list = []
+        for product in products:
+            data_dict = {}
+            data_dict.update(product[0].as_dict())
+            data_dict.update(product[1].as_dict())
+            data_dict.update(product[2].as_dict())
+            data_list.append(data_dict)
+        return data_list
+
+    def get_all_products_based_subcategory(self, subcategory_id):
         products = ProductVO.query.filter_by(
-            category_id=category_id).all()
+            subcategory_id=subcategory_id).all()
         data_list = []
         for product in products:
             data_dict = {}
@@ -53,7 +69,7 @@ class ProductDAO():
 
     def get_top_products_based_rating(self, category_id):
         products = ProductVO.query.filter_by(
-            category_id=category_id).all()
+            category_id=category_id).order_by(desc(ProductVO.average_rating)).all()
         data_list = []
         for product in products:
             data_dict = {}
