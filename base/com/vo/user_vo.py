@@ -1,4 +1,5 @@
 import datetime
+import base64
 from base import db, app
 from base.com.vo.auth_vo import UserVO
 from base.com.vo.product_vo import ProductVO
@@ -31,7 +32,7 @@ class UserInfoVO(db.Model):
             'lastName': self.user_last_name,
             'dob': self.user_dob,
             'mobile': self.user_mobile,
-            'profilePic': self.user_profile_data_url,
+            'profilePic': f'''data: image/png;base64,{base64.b64encode(self.user_profile_data_url).decode()}''',
         }
 
 
@@ -42,7 +43,7 @@ class UserFavoriteVO(db.Model):
     user_id = db.Column('user_id', db.ForeignKey(
         UserVO.user_id, ondelete='CASCADE', onupdate='CASCADE'), nullable=False)
     product_id = db.Column('product_id', db.ForeignKey(
-        ProductVO.product_id, ondelete='CASCADE', onupdate='CASCADE'), nullable=False, unique=True)
+        ProductVO.product_id, ondelete='CASCADE', onupdate='CASCADE'), nullable=False)
     created_at = db.Column('created_at', db.DateTime,
                            default=datetime.datetime.utcnow, nullable=False)
     updated_at = db.Column('updated_at', db.DateTime,
