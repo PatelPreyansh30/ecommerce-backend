@@ -13,7 +13,7 @@ class ProductCategoryDAO():
 
     def get_subcategory_id_based_subcategory(self, subcategory_name):
         subcategory = ProductSubCategoryVO.query.filter_by(
-            product_subcategory_name=subcategory_name).first()
+            subcategory_name=subcategory_name).first()
         return subcategory.product_subcategory_id
 
     def get_all_categories(self):
@@ -52,6 +52,11 @@ class ProductDAO():
             data_list.append(data_dict)
         return data_list
 
+    def get_products_based_search(self, search_item):
+        products = ProductVO.query.filter(
+            ProductVO.name.contains(search_item)).all()
+        return [product.as_dict() for product in products]
+    
     def get_top_products_based_rating(self, category_id):
         products = ProductVO.query.filter_by(
             category_id=category_id).all()

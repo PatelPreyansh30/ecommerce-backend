@@ -13,6 +13,7 @@ def get_products():
     product_dao = ProductDAO()
     category = request.args.get('category')
     subcategory = request.args.get('subcategory')
+    search = request.args.get('search')
     if category:
         # if not category:
         #     return make_response({"msg": "Query param not correct"}, 400)
@@ -28,18 +29,27 @@ def get_products():
                 return make_response({"msg": "No products found"}, 400)
         except AttributeError:
             return make_response({"msg": "No products found for given category"}, 400)
+
     elif subcategory:
         product_subcategory_dao = ProductCategoryDAO()
         try:
             subcategory_id = product_subcategory_dao.get_subcategory_id_based_subcategory(
                 subcategory)
-            data = product_dao.get_all_products_based_subcategory(subcategory_id)
+            data = product_dao.get_all_products_based_subcategory(
+                subcategory_id)
             if len(data) != 0:
                 return make_response({"products": data}, 200)
             else:
                 return make_response({"msg": "No products found"}, 400)
         except AttributeError:
             return make_response({"msg": "No products found for given subcategory"}, 400)
+
+    elif search:
+        try:
+            result = product_dao.get_products_based_search(search)
+            return make_response({"products": result}, 200)
+        except Exception as e:
+            return make_response({"msg": "Something went wrong!!"}, 400)
 
 
 @app.route(f'{product_api_path}/<int:id>')  # Products by id
