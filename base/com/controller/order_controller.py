@@ -34,3 +34,18 @@ def get_cart_by_user():
         except Exception as e:
             print(e)
             return make_response({'msg': "Something went wrong"}, 400)
+
+
+@app.route(f'{order_api_path}/cart/<int:id>', methods=['DELETE'])
+@jwt_required()
+def delete_cart_item(id):
+    cart_dao = CartDAO()
+    if request.method == 'DELETE':
+        try:
+            status = cart_dao.delete_cart_item(id)
+            if status:
+                return make_response({'msg': "Product removed from cart"}, 200)
+            return make_response({'msg': "Product not found for given id"}, 400)    
+        except Exception as e:
+            print(e)
+            return make_response({'msg': "Something went wrong"}, 400)

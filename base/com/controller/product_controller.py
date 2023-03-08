@@ -13,7 +13,6 @@ def get_products():
     product_dao = ProductDAO()
     category = request.args.get('category')
     subcategory = request.args.get('subcategory')
-    print(category)
     if category:
         # if not category:
         #     return make_response({"msg": "Query param not correct"}, 400)

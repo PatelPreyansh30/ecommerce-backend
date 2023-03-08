@@ -46,3 +46,11 @@ class CartDAO():
             data.update(item.as_dict())
         db.session.commit()
         return data
+
+    def delete_cart_item(self, cart_id):
+        cart_item_object = CartVO.query.get(cart_id)
+        if cart_item_object:
+            db.session.delete(cart_item_object)
+            db.session.commit()
+            return True
+        return False
