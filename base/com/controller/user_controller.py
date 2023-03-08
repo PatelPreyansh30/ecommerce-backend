@@ -105,3 +105,17 @@ def user_favorites():
             except Exception as e:
                 print(e)
                 return make_response({"msg": "Something went wrong, try again"}, 400)
+
+
+@app.route(f'{user_api_path}/favorites/<int:id>', methods=['DELETE'])
+@jwt_required()
+def delete_favorites_item(id):
+    user_favorite_dao = UserFavoriteDAO()
+    if request.method == 'DELETE':
+        try:
+            status = user_favorite_dao.delete_favorite_item(id)
+            if status:
+                return make_response({'msg': "Product removed from favorites"}, 200)
+            return make_response({'msg': "Product not found for given id"}, 400)
+        except Exception as e:
+            return make_response({'msg': "Something went wrong"}, 400)

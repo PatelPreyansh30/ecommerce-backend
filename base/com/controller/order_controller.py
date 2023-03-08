@@ -47,5 +47,4 @@ def delete_cart_item(id):
                 return make_response({'msg': "Product removed from cart"}, 200)
             return make_response({'msg': "Product not found for given id"}, 400)    
         except Exception as e:
-            print(e)
             return make_response({'msg': "Something went wrong"}, 400)

@@ -79,3 +79,11 @@ class UserFavoriteDAO():
             data.update(item.as_dict())
         db.session.commit()
         return data
+
+    def delete_favorite_item(self, favorite_item_id):
+        favorite_item_object = UserFavoriteVO.query.get(favorite_item_id)
+        if favorite_item_object:
+            db.session.delete(favorite_item_object)
+            db.session.commit()
+            return True
+        return False
