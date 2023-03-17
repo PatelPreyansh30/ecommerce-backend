@@ -2,10 +2,9 @@ from flask import make_response, request
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from base import app
 from base.com.vo.product_vo import ProductVO
-from base.com.dao.product_dao import ProductDAO, ProductCategoryDAO, ProductReviewsRatingsDAO
+from base.com.dao.product_dao import ProductDAO, ProductCategoryDAO, ProductReviewsRatingsDAO, ProductSubCategoryDAO
 
 product_api_path = '/api/a3/products'
-
 
 @app.route(f'{product_api_path}')
 @jwt_required()
@@ -31,7 +30,7 @@ def get_products():
             return make_response({"msg": "No products found for given category"}, 400)
 
     elif subcategory:
-        product_subcategory_dao = ProductCategoryDAO()
+        product_subcategory_dao = ProductSubCategoryDAO()
         try:
             subcategory_id = product_subcategory_dao.get_subcategory_id_based_subcategory(
                 subcategory)
@@ -144,6 +143,7 @@ def get_top_products():
             category_id = product_category_dao.get_category_id_based_category(
                 category)
             data = product_dao.get_top_products_based_rating(category_id)
+            # print(data)
             if len(data) != 0:
                 return make_response({"products": data}, 200)
             else:
